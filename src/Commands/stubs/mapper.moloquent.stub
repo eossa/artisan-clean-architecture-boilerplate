@@ -1,0 +1,21 @@
+<?php
+
+namespace DummyNamespace;
+
+use App\Domain\Entities\DummyClass as Entity;
+use App\Models\DummyClass as Model;
+
+class DummyClass
+{
+    public function convertFromModelToEntity(Model $model): Entity
+    {
+        return new Entity();
+    }
+
+    public function convertFromEntityToArray(Entity $entity): array
+    {
+        return [
+            'id' => $entity->getId(),
+        ];
+    }
+}

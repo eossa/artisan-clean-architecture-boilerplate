@@ -1,0 +1,12 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespaceDomain\Entities\DummyClass as Entity;
+use DummyRootNamespaceDomain\Repositories\DummyClass as Repository;
+use DummyRootNamespaceModels\DummyClass as Model;
+
+class DummyClassEloquent implements Repository
+{
+    //
+}

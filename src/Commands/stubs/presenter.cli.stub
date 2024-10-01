@@ -1,0 +1,19 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyBoundaryNamespace\DummyClass as OutputBoundary;
+use App\Domain\ViewModel;
+use App\Infrastructure\ViewModels\Cli;
+use Illuminate\Console\Command;
+
+class DummyClassCli implements OutputBoundary
+{
+    public function done(): ViewModel
+    {
+        return new Cli(function (Command $command) {
+            $command->info('Done');
+            return 0;
+        });
+    }
+}

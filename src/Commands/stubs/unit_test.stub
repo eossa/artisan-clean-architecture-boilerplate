@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use PHPUnit\Framework\TestCase;
+
+class DummyClass extends TestCase
+{
+    public function testEnsureIsComplete()
+    {
+        $this->markTestIncomplete();
+    }
+}

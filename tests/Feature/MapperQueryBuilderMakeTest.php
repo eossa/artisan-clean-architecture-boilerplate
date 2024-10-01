@@ -1,0 +1,54 @@
+<?php
+
+namespace Tests\Feature;
+
+use Orchestra\Testbench\TestCase;
+
+class MapperQueryBuilderMakeTest extends TestCase
+{
+    /**
+     * Get package providers.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     *
+     * @return array
+     */
+    protected function getPackageProviders($app)
+    {
+        return ['WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
+    }
+
+    public function testEnsureBaseIsCreated()
+    {
+        $this->artisan('make:mapper:query-builder', ['name' => 'Test'])
+            ->expectsOutput('Query Builder Mapper created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(app_path('Infrastructure/Mappers/Test.php'));
+        $this->app['files']->delete(app_path('Infrastructure/Mappers/Test.php'));
+    }
+
+    public function testEnsureExistingBaseIsNotCreated()
+    {
+        $this->artisan('make:mapper:query-builder', ['name' => 'Test'])
+            ->expectsOutput('Query Builder Mapper created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(app_path('Infrastructure/Mappers/Test.php'));
+        $this->artisan('make:mapper:query-builder', ['name' => 'Test'])
+            ->expectsOutput('Query Builder Mapper already exists!')
+            ->assertExitCode(1);
+        $this->app['files']->delete(app_path('Infrastructure/Mappers/Test.php'));
+    }
+
+    public function testEnsureBaseIsOverwritenWhenAlreadyExists()
+    {
+        $this->artisan('make:mapper:query-builder', ['name' => 'Test'])
+            ->expectsOutput('Query Builder Mapper created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(app_path('Infrastructure/Mappers/Test.php'));
+        $this->artisan('make:mapper:query-builder', ['name' => 'Test', '--force' => true])
+            ->expectsOutput('Query Builder Mapper created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(app_path('Infrastructure/Mappers/Test.php'));
+        $this->app['files']->delete(app_path('Infrastructure/Mappers/Test.php'));
+    }
+}

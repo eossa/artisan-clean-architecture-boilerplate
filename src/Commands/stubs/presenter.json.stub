@@ -1,0 +1,15 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyBoundaryNamespace\DummyClass as OutputBoundary;
+use App\Domain\ViewModel;
+use App\Infrastructure\ViewModels\JsonResource;
+
+class DummyClassJson implements OutputBoundary
+{
+    public function done(): ViewModel
+    {
+        return new JsonResource($resource);
+    }
+}

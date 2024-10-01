@@ -1,0 +1,50 @@
+{
+  "name": "wasi-co/artisan-clean-architecture-boilerplate",
+  "description": "A Composer package providing custom Laravel Artisan commands to streamline the creation of various clean architecture components in a Laravel application.",
+  "type": "library",
+  "homepage": "https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate",
+  "license": "Private",
+  "authors": [
+    {
+      "name": "Wasi",
+      "email": "tech.wasi@lifullconnect.com",
+      "role": "Owner"
+    },
+    {
+      "name": "Elkin Ossa",
+      "email": "elkin.ossa@lifullconnect.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.0",
+    "illuminate/console": "^5.5",
+    "illuminate/support": "^5.5"
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.5",
+    "phpunit/phpunit": "^7.0",
+    "squizlabs/php_codesniffer": "^3.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "WasiCo\\ArtisanCleanArchitectureBoilerplate\\": "src/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider"
+      ]
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

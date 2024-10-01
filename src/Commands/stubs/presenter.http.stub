@@ -1,0 +1,16 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyBoundaryNamespace\DummyClass as OutputBoundary;
+use App\Domain\ViewModel;
+use App\Infrastructure\Responses\ResponseFactory;
+use App\Infrastructure\ViewModels\SymfonyHttpResponse;
+
+class DummyClassHttp implements OutputBoundary
+{
+    public function done(): ViewModel
+    {
+        return new SymfonyHttpResponse(ResponseFactory::emptySuccess());
+    }
+}

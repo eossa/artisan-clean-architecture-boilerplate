@@ -1,0 +1,13 @@
+<?php
+
+namespace DummyNamespace;
+
+use DummyRootNamespaceDomain\Entities\DummyClass as Entity;
+use DummyRootNamespaceDomain\Repositories\DummyClass as Repository;
+use Illuminate\Support\Facades\DB;
+use stdClass;
+
+class DummyClassQueryBuilder implements Repository
+{
+    //
+}
