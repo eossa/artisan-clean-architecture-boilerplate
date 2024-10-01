@@ -1,0 +1,6 @@
+{
+  "tagPrefix": "v",
+  "scripts": {
+    "posttag": "git push --follow-tags"
+  }
+}
