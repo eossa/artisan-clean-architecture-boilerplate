@@ -45,6 +45,16 @@ To run the tests with coverage, use the following command:
 composer test-coverage
 ```
 
+## Releasing the package
+
+Run the following command to create a release of the package:
+
+```bash
+composer run release
+```
+
+Do not forget to add the variable `$GITLAB_PERSONAL_ACCESS_TOKEN` to your terminal with your own personal GitLab access token.
+
 ## License
 This package is licensed under a Private License.
 
