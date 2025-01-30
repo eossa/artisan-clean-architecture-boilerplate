@@ -3,13 +3,14 @@
 namespace DummyNamespace;
 
 use DummyBoundaryNamespace\DummyClass as OutputBoundary;
+use DummyDataNamespace\DummyClass as Data;
 use App\Domain\ViewModel;
 use App\Infrastructure\Responses\ResponseFactory;
 use App\Infrastructure\ViewModels\SymfonyHttpResponse;
 
 class DummyClassHttp implements OutputBoundary
 {
-    public function done(): ViewModel
+    public function done(Data $data): ViewModel
     {
         return new SymfonyHttpResponse(ResponseFactory::emptySuccess());
     }

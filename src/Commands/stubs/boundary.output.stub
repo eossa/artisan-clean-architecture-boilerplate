@@ -2,9 +2,10 @@
 
 namespace DummyNamespace;
 
+use DummyDataNamespace\DummyClass as Data;
 use App\Domain\ViewModel;
 
 interface DummyClass
 {
-    public function done(): ViewModel;
+    public function done(Data $data): ViewModel;
 }

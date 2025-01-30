@@ -95,6 +95,39 @@ class BoundaryInputMake extends GeneratorCommand
     }
 
     /**
+     * Replace the namespace for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return $this
+     */
+    protected function replaceNamespace(&$stub, $name)
+    {
+        $stub = str_replace(
+            ['DummyNamespace', 'DummyRootNamespace', 'DummyDataNamespace'],
+            [
+                $this->getNamespace($name),
+                $this->rootNamespace(),
+                $this->getDataNamespace($name),
+            ],
+            $stub
+        );
+        return $this;
+    }
+
+    /**
+     * Get the data namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getDataNamespace(string $name): string
+    {
+        return str_replace('Boundaries', 'Data', $this->getNamespace($name));
+    }
+
+    /**
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace

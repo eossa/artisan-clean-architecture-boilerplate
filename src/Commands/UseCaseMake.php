@@ -83,12 +83,21 @@ class UseCaseMake extends GeneratorCommand
     protected function replaceNamespace(&$stub, $name)
     {
         $stub = str_replace(
-            ['DummyNamespace', 'DummyRootNamespace', 'DummyInputBoundaryNamespace', 'DummyOutputBoundaryNamespace'],
+            [
+                'DummyNamespace',
+                'DummyRootNamespace',
+                'DummyInputBoundaryNamespace',
+                'DummyOutputBoundaryNamespace',
+                'DummyInputDataNamespace',
+                'DummyOutputDataNamespace'
+            ],
             [
                 $this->getNamespace($name),
                 $this->rootNamespace(),
                 $this->getInputBoundaryNamespace($name),
                 $this->getOutputBoundaryNamespace($name),
+                $this->getInputDataNamespace($name),
+                $this->getOutputDataNamespace($name),
             ],
             $stub
         );
@@ -117,6 +126,30 @@ class UseCaseMake extends GeneratorCommand
     protected function getOutputBoundaryNamespace(string $name): string
     {
         return str_replace('UseCases', 'Boundaries\Output', $this->getNamespace($name));
+    }
+
+    /**
+     * Get the input data namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getInputDataNamespace(string $name): string
+    {
+        return str_replace('UseCases', 'Data\Input', $this->getNamespace($name));
+    }
+
+    /**
+     * Get the output data namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getOutputDataNamespace(string $name): string
+    {
+        return str_replace('UseCases', 'Data\Output', $this->getNamespace($name));
     }
 
     /**

@@ -68,8 +68,13 @@ class PresenterMake extends GeneratorCommand
     protected function replaceNamespace(&$stub, $name)
     {
         $stub = str_replace(
-            ['DummyNamespace', 'DummyRootNamespace', 'DummyBoundaryNamespace'],
-            [$this->getNamespace($name), $this->rootNamespace(), $this->getBoundaryNamespace($name)],
+            ['DummyNamespace', 'DummyRootNamespace', 'DummyBoundaryNamespace', 'DummyDataNamespace'],
+            [
+                $this->getNamespace($name),
+                $this->rootNamespace(),
+                $this->getBoundaryNamespace($name),
+                $this->getDataNamespace($name),
+            ],
             $stub
         );
 
@@ -86,6 +91,18 @@ class PresenterMake extends GeneratorCommand
     protected function getBoundaryNamespace(string $name): string
     {
         return str_replace('Infrastructure\Presenters', 'Domain\Boundaries\Output', $this->getNamespace($name));
+    }
+
+    /**
+     * Get the data namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getDataNamespace(string $name): string
+    {
+        return str_replace('Infrastructure\Presenters', 'Domain\Data\Output', $this->getNamespace($name));
     }
 
     /**
