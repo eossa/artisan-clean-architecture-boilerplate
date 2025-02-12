@@ -1,0 +1,38 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use DummyInputBoundaryNamespace\DummyClass as InputBoundary;
+use DummyInputDataNamespace\DummyClass as Data;
+use App\Domain\ViewModel;
+use DummyControllerNamespace\DummyClassController as Controller;
+use DummyRequestNamespace\DummyClass as Request;
+use PHPUnit\Framework\TestCase;
+use Tests\Builders\RequestBuilder;
+
+class DummyClass extends TestCase
+{
+    public function testEnsureUseCaseIsCalled()
+    {
+        $useCase = $this->prophesize(InputBoundary::class);
+        $viewModel = $this->prophesize(ViewModel::class);
+        $controller = new Controller($useCase->reveal());
+        $useCase->do(new Data())->willReturn($viewModel->reveal());
+        $viewModel->render()->willReturn('OK');
+        $request = RequestBuilder::aRequest()
+            ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
+            ->withBodyJsonAsArray([
+                'foo' => 'bar',
+            ])
+            ->build();
+
+        $response = $controller->__invoke(Request::createFromBase($request));
+
+        $this->assertNotNull($response);
+        $this->assertEquals('OK', $response);
+        $useCase->do(new Data())->shouldHaveBeenCalled();
+        $viewModel->render()->shouldHaveBeenCalled();
+    }
+}

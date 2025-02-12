@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use DummyOutputBoundaryNamespace\DummyClass as OutputBoundary;
+use DummyInputDataNamespace\DummyClass as InputData;
+use DummyOutputDataNamespace\DummyClass as OutputData;
+use DummyUseCaseNamespace\DummyClass as UseCase;
+use App\Domain\ViewModel;
+use PHPUnit\Framework\TestCase;
+
+class DummyClass extends TestCase
+{
+    public function testEnsureIsDone()
+    {
+        $viewModel = $this->prophesize(ViewModel::class);
+        $output = $this->prophesize(OutputBoundary::class);
+        $output->done(new OutputData())->willReturn($viewModel->reveal());
+        $useCase = new UseCase($output->reveal());
+
+        $useCase->do(new InputData());
+
+        $output->done(new OutputData())->shouldHaveBeenCalled();
+    }
+}

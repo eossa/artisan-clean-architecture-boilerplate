@@ -17,7 +17,7 @@ use WasiCo\ArtisanCleanArchitectureBoilerplate\Commands\{
     RepositoryMake,
     RepositoryMoloquentMake,
     RepositoryQueryBuilderMake,
-    TestMakeCommand,
+    TestMake,
     UseCaseMake
 };
 
@@ -40,7 +40,7 @@ class CommandServiceProvider extends ServiceProvider
                 RepositoryMake::class,
                 RepositoryMoloquentMake::class,
                 RepositoryQueryBuilderMake::class,
-                TestMakeCommand::class,
+                TestMake::class,
                 UseCaseMake::class,
             ]);
         }
