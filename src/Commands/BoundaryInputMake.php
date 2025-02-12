@@ -44,6 +44,7 @@ class BoundaryInputMake extends GeneratorCommand
             $this->input->setOption('use-case', true);
             $this->input->setOption('presenter', true);
             $this->input->setOption('output-data', true);
+            $this->input->setOption('test', true);
         }
 
         if ($this->option('input-data')) {
@@ -80,6 +81,7 @@ class BoundaryInputMake extends GeneratorCommand
             'name' => $this->argument('name'),
             '--presenter' => $this->option('presenter'),
             '--output-data' => $this->option('output-data'),
+            '--test' => $this->option('test'),
             '--force' => $this->option('force'),
         ]);
     }
@@ -155,6 +157,8 @@ class BoundaryInputMake extends GeneratorCommand
             ['presenter', 'p', InputOption::VALUE_NONE, 'Create a new presenter for the use case'],
 
             ['output-data', 'o', InputOption::VALUE_NONE, 'Create a new output data for the presenter'],
+
+            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the use case'],
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the input boundary already exists.'],
         ];
