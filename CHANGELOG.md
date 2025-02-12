@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.1.0...v1.2.0) (2025-02-12)
+
+
+### Features
+
+* **phpunit:** Use case and controller tests ([620ca64](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/620ca64e29c897c6217f58a2b52859cec9b126a2))
+* **use case:** Create test with use case ([32f0c5c](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/32f0c5c86f3382fa1e8bda568f51744d827386f7))
+
 ## [1.1.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.0.2...v1.1.0) (2025-01-30)
 
 
