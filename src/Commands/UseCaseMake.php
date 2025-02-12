@@ -42,14 +42,19 @@ class UseCaseMake extends GeneratorCommand
         if ($this->option('all')) {
             $this->input->setOption('presenter', true);
             $this->input->setOption('output-data', true);
+            $this->input->setOption('test', true);
         }
 
         $this->createOutputBoundary();
+
+        if ($this->option('test')) {
+            $this->createTest();
+        }
         return 0;
     }
 
     /**
-     * Create a presenter for the repository.
+     * Create an output boundary for the repository.
      *
      * @return void
      */
@@ -59,6 +64,20 @@ class UseCaseMake extends GeneratorCommand
             'name' => $this->argument('name'),
             '--presenter' => $this->option('presenter'),
             '--data' => $this->option('output-data'),
+            '--force' => $this->option('force'),
+        ]);
+    }
+
+    /**
+     * Create a test for the repository.
+     *
+     * @return void
+     */
+    protected function createTest()
+    {
+        $this->call('make:phpunit', [
+            'name' => $this->argument('name'),
+            '--use-case' => true,
             '--force' => $this->option('force'),
         ]);
     }
@@ -175,7 +194,9 @@ class UseCaseMake extends GeneratorCommand
 
             ['presenter', 'p', InputOption::VALUE_NONE, 'Generate a presenter for the use case'],
 
-            ['output-data', 'o', InputOption::VALUE_NONE, 'Generate an output data for the presenter'],
+            ['output-data', 'o', InputOption::VALUE_NONE, 'Generate an output data for the use case'],
+
+            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the use case'],
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the use case already exists.'],
         ];
