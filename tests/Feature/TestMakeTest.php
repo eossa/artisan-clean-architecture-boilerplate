@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Orchestra\Testbench\TestCase;
@@ -20,104 +22,108 @@ class TestMakeTest extends TestCase
 
     public function testEnsureDefaultIsCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test'])
+        $this->artisan('make:phpunit', ['name' => 'Example'])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
     }
 
     public function testEnsureExistingDefaultIsNotCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test'])
+        $this->artisan('make:phpunit', ['name' => 'Example'])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test'])
+        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->artisan('make:phpunit', ['name' => 'Example'])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(base_path('tests/Unit/Test.php'));
+        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
     }
 
     public function testEnsureDefaultIsOverwritenWhenAlreadyExists()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test'])
+        $this->artisan('make:phpunit', ['name' => 'Example'])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test', '--force' => true])
+        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->artisan('make:phpunit', ['name' => 'Example', '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
     }
 
     public function testEnsureUseCaseIsCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--use-case' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
     public function testEnsureExistingUseCaseIsNotCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--use-case' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test', '--use-case' => true])
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Test.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
     public function testEnsureUseCaseIsOverwritenWhenAlreadyExists()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--use-case' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test', '--use-case' => true, '--force' => true])
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true, '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
     public function testEnsureControllerIsCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--controller' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
+        $this->assertControlllerContent();
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
     }
 
     public function testEnsureExistingControllerIsNotCreated()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--controller' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test', '--controller' => true])
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
+        $this->assertControlllerContent();
+        $this->artisan('make:phpunit', ['name' => 'Example', '--controller' => true])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
     }
 
     public function testEnsureControllerIsOverwritenWhenAlreadyExists()
     {
-        $this->artisan('make:phpunit', ['name' => 'Test', '--controller' => true])
+        $this->artisan('make:phpunit', ['name' => 'Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
-        $this->artisan('make:phpunit', ['name' => 'Test', '--controller' => true, '--force' => true])
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
+        $this->assertControlllerContent();
+        $this->artisan('make:phpunit', ['name' => 'Example', '--controller' => true, '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/Test.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
+        $this->assertControlllerContent();
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/ExampleTest.php'));
     }
 
     public function testEnsureNamespacedControllerIsCreated()
@@ -125,8 +131,9 @@ class TestMakeTest extends TestCase
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+        $this->assertControlllerContent('\\V1');
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
     }
 
     public function testEnsureExistingNamespacedControllerIsNotCreated()
@@ -134,11 +141,11 @@ class TestMakeTest extends TestCase
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
     }
 
     public function testEnsureNamespacedControllerIsOverwritenWhenAlreadyExists()
@@ -146,11 +153,60 @@ class TestMakeTest extends TestCase
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true, '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+    }
+
+    private function assertControlllerContent(string $namespace = '')
+    {
+        $filenamespace = str_replace('\\', '/', $namespace);
+        $this->assertStringEqualsFile(
+            base_path("tests/Unit/Infrastructure/Controllers$filenamespace/ExampleTest.php"),
+            <<<PHP
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Infrastructure\Controllers$namespace;
+
+use App\Domain\Boundaries\Input\Example as InputBoundary;
+use App\Domain\Data\Input\Example as Data;
+use App\Domain\ViewModel;
+use App\Http\Controllers$namespace\ExampleController as Controller;
+use App\Http\Requests$namespace\Example as Request;
+use PHPUnit\Framework\TestCase;
+use Tests\Builders\RequestBuilder;
+
+class ExampleTest extends TestCase
+{
+    public function testEnsureUseCaseIsCalled()
+    {
+        \$useCase = \$this->prophesize(InputBoundary::class);
+        \$viewModel = \$this->prophesize(ViewModel::class);
+        \$controller = new Controller(\$useCase->reveal());
+        \$useCase->do(new Data())->willReturn(\$viewModel->reveal());
+        \$viewModel->render()->willReturn('OK');
+        \$request = RequestBuilder::aRequest()
+            ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
+            ->withBodyJsonAsArray([
+                'foo' => 'bar',
+            ])
+            ->build();
+
+        \$response = \$controller->__invoke(Request::createFromBase(\$request));
+
+        \$this->assertNotNull(\$response);
+        \$this->assertEquals('OK', \$response);
+        \$useCase->do(new Data())->shouldHaveBeenCalled();
+        \$viewModel->render()->shouldHaveBeenCalled();
+    }
+}
+
+PHP
+        );
     }
 }

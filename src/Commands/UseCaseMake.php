@@ -76,7 +76,7 @@ class UseCaseMake extends GeneratorCommand
     protected function createTest()
     {
         $this->call('make:phpunit', [
-            'name' => $this->argument('name') . 'Test',
+            'name' => $this->argument('name'),
             '--use-case' => true,
             '--force' => $this->option('force'),
         ]);

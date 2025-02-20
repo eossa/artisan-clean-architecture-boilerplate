@@ -12,7 +12,7 @@ use DummyRequestNamespace\DummyClass as Request;
 use PHPUnit\Framework\TestCase;
 use Tests\Builders\RequestBuilder;
 
-class DummyClass extends TestCase
+class DummyClassTest extends TestCase
 {
     public function testEnsureUseCaseIsCalled()
     {
