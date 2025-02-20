@@ -27,7 +27,7 @@ This package provides several Artisan commands to help you generate clean archit
 - `php artisan make:repository` - Generates a Repository class.
 - `php artisan make:repository-moloquent` - Generates a Moloquent Repository class.
 - `php artisan make:repository-query-builder` - Generates a Query Builder Repository class.
-- `php artisan make:test` - Generates a Test class.
+- `php artisan make:phpunit` - Generates a Test class.
 - `php artisan make:use-case` - Generates a Use Case class.
 
 ## Running Tests
