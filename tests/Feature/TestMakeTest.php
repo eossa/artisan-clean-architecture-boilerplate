@@ -60,6 +60,7 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->assertUseCaseContent();
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
@@ -69,6 +70,7 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->assertUseCaseContent();
         $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
@@ -81,11 +83,51 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->assertUseCaseContent();
         $this->artisan('make:phpunit', ['name' => 'Example', '--use-case' => true, '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+        $this->assertUseCaseContent();
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
+    }
+
+    public function testEnsureNamespacedUseCaseIsCreated()
+    {
+        $this->artisan('make:phpunit', ['name' => 'Admin/Example', '--use-case' => true])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+        $this->assertUseCaseContent('\\Admin');
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+    }
+
+    public function testEnsureExistingNamespacedUseCaseIsNotCreated()
+    {
+        $this->artisan('make:phpunit', ['name' => 'Admin/Example', '--use-case' => true])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+        $this->assertUseCaseContent('\\Admin');
+        $this->artisan('make:phpunit', ['name' => 'Admin/Example', '--use-case' => true])
+            ->expectsOutput('Test already exists!')
+            ->assertExitCode(1);
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+    }
+
+    public function testEnsureNamespacedUseCaseIsOverwritenWhenAlreadyExists()
+    {
+        $this->artisan('make:phpunit', ['name' => 'Admin/Example', '--use-case' => true])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+        $this->assertUseCaseContent('\\Admin');
+        $this->artisan('make:phpunit', ['name' => 'Admin/Example', '--use-case' => true, '--force' => true])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
+        $this->assertUseCaseContent('\\Admin');
+        $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/Admin/ExampleTest.php'));
     }
 
     public function testEnsureControllerIsCreated()
@@ -142,6 +184,7 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+        $this->assertControlllerContent('\\V1');
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
@@ -154,10 +197,12 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+        $this->assertControlllerContent('\\V1');
         $this->artisan('make:phpunit', ['name' => 'V1/Example', '--controller' => true, '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
+        $this->assertControlllerContent('\\V1');
         $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Controllers/V1/ExampleTest.php'));
     }
 
@@ -203,6 +248,44 @@ class ExampleTest extends TestCase
         \$this->assertEquals('OK', \$response);
         \$useCase->do(new Data())->shouldHaveBeenCalled();
         \$viewModel->render()->shouldHaveBeenCalled();
+    }
+}
+
+PHP
+        );
+    }
+
+    private function assertUseCaseContent(string $namespace = '')
+    {
+        $filenamespace = str_replace('\\', '/', $namespace);
+        $this->assertStringEqualsFile(
+            base_path("tests/Unit/Domain/UseCases$filenamespace/ExampleTest.php"),
+            <<<PHP
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit\Domain\UseCases$namespace;
+
+use App\Domain\Boundaries\Output$namespace\Example as OutputBoundary;
+use App\Domain\Data\Input$namespace\Example as InputData;
+use App\Domain\Data\Output$namespace\Example as OutputData;
+use App\Domain\UseCases$namespace\Example as UseCase;
+use App\Domain\ViewModel;
+use PHPUnit\Framework\TestCase;
+
+class ExampleTest extends TestCase
+{
+    public function testEnsureIsDone()
+    {
+        \$viewModel = \$this->prophesize(ViewModel::class);
+        \$output = \$this->prophesize(OutputBoundary::class);
+        \$output->done(new OutputData())->willReturn(\$viewModel->reveal());
+        \$useCase = new UseCase(\$output->reveal());
+
+        \$useCase->do(new InputData());
+
+        \$output->done(new OutputData())->shouldHaveBeenCalled();
     }
 }
 

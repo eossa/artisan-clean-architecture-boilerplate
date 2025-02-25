@@ -11,7 +11,7 @@ use DummyUseCaseNamespace\DummyClass as UseCase;
 use App\Domain\ViewModel;
 use PHPUnit\Framework\TestCase;
 
-class DummyClass extends TestCase
+class DummyClassTest extends TestCase
 {
     public function testEnsureIsDone()
     {
