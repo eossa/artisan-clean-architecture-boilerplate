@@ -6,7 +6,7 @@ namespace DummyNamespace;
 
 use PHPUnit\Framework\TestCase;
 
-class DummyClass extends TestCase
+class DummyClassTest extends TestCase
 {
     public function testEnsureIsComplete()
     {

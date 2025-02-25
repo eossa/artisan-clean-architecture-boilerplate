@@ -26,6 +26,7 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->assertContent();
         $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
     }
 
@@ -35,6 +36,7 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->assertContent();
         $this->artisan('make:phpunit', ['name' => 'Example'])
             ->expectsOutput('Test already exists!')
             ->assertExitCode(1);
@@ -47,11 +49,51 @@ class TestMakeTest extends TestCase
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->assertContent();
         $this->artisan('make:phpunit', ['name' => 'Example', '--force' => true])
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
+        $this->assertContent();
         $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
+    }
+
+    public function testEnsureNamespacedDefaultIsCreated()
+    {
+        $this->artisan('make:phpunit', ['name' => 'User/Example'])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/User/ExampleTest.php'));
+        $this->assertContent('\\User');
+        $this->app['files']->delete(base_path('tests/Unit/User/ExampleTest.php'));
+    }
+
+    public function testEnsureExistingNamespacedDefaultIsNotCreated()
+    {
+        $this->artisan('make:phpunit', ['name' => 'User/Example'])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/User/ExampleTest.php'));
+        $this->assertContent('\\User');
+        $this->artisan('make:phpunit', ['name' => 'User/Example'])
+            ->expectsOutput('Test already exists!')
+            ->assertExitCode(1);
+        $this->app['files']->delete(base_path('tests/Unit/User/ExampleTest.php'));
+    }
+
+    public function testEnsureNamespacedDefaultIsOverwritenWhenAlreadyExists()
+    {
+        $this->artisan('make:phpunit', ['name' => 'User/Example'])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/User/ExampleTest.php'));
+        $this->assertContent('\\User');
+        $this->artisan('make:phpunit', ['name' => 'User/Example', '--force' => true])
+            ->expectsOutput('Test created successfully.')
+            ->assertExitCode(0);
+        $this->assertFileExists(base_path('tests/Unit/User/ExampleTest.php'));
+        $this->assertContent('\\User');
+        $this->app['files']->delete(base_path('tests/Unit/User/ExampleTest.php'));
     }
 
     public function testEnsureUseCaseIsCreated()
@@ -286,6 +328,32 @@ class ExampleTest extends TestCase
         \$useCase->do(new InputData());
 
         \$output->done(new OutputData())->shouldHaveBeenCalled();
+    }
+}
+
+PHP
+        );
+    }
+
+    private function assertContent(string $namespace = '')
+    {
+        $filenamespace = str_replace('\\', '/', $namespace);
+        $this->assertStringEqualsFile(
+            base_path("tests/Unit$filenamespace/ExampleTest.php"),
+            <<<PHP
+<?php
+
+declare(strict_types=1);
+
+namespace Tests\Unit$namespace;
+
+use PHPUnit\Framework\TestCase;
+
+class ExampleTest extends TestCase
+{
+    public function testEnsureIsComplete()
+    {
+        \$this->markTestIncomplete();
     }
 }
 
