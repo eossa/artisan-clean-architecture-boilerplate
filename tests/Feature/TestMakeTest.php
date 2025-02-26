@@ -642,6 +642,7 @@ namespace Tests\Unit\Infrastructure\Presenters$namespace;
 use App\Domain\Data\Output$namespace\Example as Data;
 use App\Infrastructure\Presenters$namespace\ExampleHttp as Presenter;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExampleHttpTest extends TestCase
 {
