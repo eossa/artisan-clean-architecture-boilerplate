@@ -13,15 +13,34 @@ use PHPUnit\Framework\TestCase;
 
 class DummyClassTest extends TestCase
 {
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private $output;
+
+    /**
+     * @var UseCase
+     */
+    private $useCase;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private $viewModel;
+
+    protected function setUp()
+    {
+        $this->viewModel = $this->prophesize(ViewModel::class);
+        $this->output = $this->prophesize(OutputBoundary::class);
+        $this->useCase = new UseCase($this->output->reveal());
+    }
+
     public function testEnsureIsDone()
     {
-        $viewModel = $this->prophesize(ViewModel::class);
-        $output = $this->prophesize(OutputBoundary::class);
-        $output->done(new OutputData())->willReturn($viewModel->reveal());
-        $useCase = new UseCase($output->reveal());
+        $this->output->done(new OutputData())->willReturn($this->viewModel->reveal());
 
-        $useCase->do(new InputData());
+        $this->useCase->do(new InputData());
 
-        $output->done(new OutputData())->shouldHaveBeenCalled();
+        $this->output->done(new OutputData())->shouldHaveBeenCalled();
     }
 }

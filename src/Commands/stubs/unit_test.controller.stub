@@ -14,13 +14,32 @@ use Tests\Builders\RequestBuilder;
 
 class DummyClassTest extends TestCase
 {
+    /**
+     * @var Controller
+     */
+    private $controller;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private $useCase;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private $viewModel;
+
+    protected function setUp()
+    {
+        $this->useCase = $this->prophesize(InputBoundary::class);
+        $this->viewModel = $this->prophesize(ViewModel::class);
+        $this->controller = new Controller($this->useCase->reveal());
+    }
+
     public function testEnsureUseCaseIsCalled()
     {
-        $useCase = $this->prophesize(InputBoundary::class);
-        $viewModel = $this->prophesize(ViewModel::class);
-        $controller = new Controller($useCase->reveal());
-        $useCase->do(new Data())->willReturn($viewModel->reveal());
-        $viewModel->render()->willReturn('OK');
+        $this->useCase->do(new Data())->willReturn($this->viewModel->reveal());
+        $this->viewModel->render()->willReturn('OK');
         $request = RequestBuilder::aRequest()
             ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
             ->withBodyJsonAsArray([
@@ -28,11 +47,11 @@ class DummyClassTest extends TestCase
             ])
             ->build();
 
-        $response = $controller->__invoke(Request::createFromBase($request));
+        $response = $this->controller->__invoke(Request::createFromBase($request));
 
         $this->assertNotNull($response);
         $this->assertEquals('OK', $response);
-        $useCase->do(new Data())->shouldHaveBeenCalled();
-        $viewModel->render()->shouldHaveBeenCalled();
+        $this->useCase->do(new Data())->shouldHaveBeenCalled();
+        $this->viewModel->render()->shouldHaveBeenCalled();
     }
 }

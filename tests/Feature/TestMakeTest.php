@@ -498,13 +498,32 @@ use Tests\Builders\RequestBuilder;
 
 class ExampleTest extends TestCase
 {
+    /**
+     * @var Controller
+     */
+    private \$controller;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private \$useCase;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private \$viewModel;
+
+    protected function setUp()
+    {
+        \$this->useCase = \$this->prophesize(InputBoundary::class);
+        \$this->viewModel = \$this->prophesize(ViewModel::class);
+        \$this->controller = new Controller(\$this->useCase->reveal());
+    }
+
     public function testEnsureUseCaseIsCalled()
     {
-        \$useCase = \$this->prophesize(InputBoundary::class);
-        \$viewModel = \$this->prophesize(ViewModel::class);
-        \$controller = new Controller(\$useCase->reveal());
-        \$useCase->do(new Data())->willReturn(\$viewModel->reveal());
-        \$viewModel->render()->willReturn('OK');
+        \$this->useCase->do(new Data())->willReturn(\$this->viewModel->reveal());
+        \$this->viewModel->render()->willReturn('OK');
         \$request = RequestBuilder::aRequest()
             ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
             ->withBodyJsonAsArray([
@@ -512,12 +531,12 @@ class ExampleTest extends TestCase
             ])
             ->build();
 
-        \$response = \$controller->__invoke(Request::createFromBase(\$request));
+        \$response = \$this->controller->__invoke(Request::createFromBase(\$request));
 
         \$this->assertNotNull(\$response);
         \$this->assertEquals('OK', \$response);
-        \$useCase->do(new Data())->shouldHaveBeenCalled();
-        \$viewModel->render()->shouldHaveBeenCalled();
+        \$this->useCase->do(new Data())->shouldHaveBeenCalled();
+        \$this->viewModel->render()->shouldHaveBeenCalled();
     }
 }
 
@@ -546,16 +565,35 @@ use PHPUnit\Framework\TestCase;
 
 class ExampleTest extends TestCase
 {
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private \$output;
+
+    /**
+     * @var UseCase
+     */
+    private \$useCase;
+
+    /**
+     * @var \Prophecy\Prophecy\ObjectProphecy
+     */
+    private \$viewModel;
+
+    protected function setUp()
+    {
+        \$this->viewModel = \$this->prophesize(ViewModel::class);
+        \$this->output = \$this->prophesize(OutputBoundary::class);
+        \$this->useCase = new UseCase(\$this->output->reveal());
+    }
+
     public function testEnsureIsDone()
     {
-        \$viewModel = \$this->prophesize(ViewModel::class);
-        \$output = \$this->prophesize(OutputBoundary::class);
-        \$output->done(new OutputData())->willReturn(\$viewModel->reveal());
-        \$useCase = new UseCase(\$output->reveal());
+        \$this->output->done(new OutputData())->willReturn(\$this->viewModel->reveal());
 
-        \$useCase->do(new InputData());
+        \$this->useCase->do(new InputData());
 
-        \$output->done(new OutputData())->shouldHaveBeenCalled();
+        \$this->output->done(new OutputData())->shouldHaveBeenCalled();
     }
 }
 
