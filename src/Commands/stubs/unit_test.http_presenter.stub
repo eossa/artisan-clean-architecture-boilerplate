@@ -7,6 +7,7 @@ namespace DummyNamespace;
 use DummyOutputDataNamespace\DummyClass as Data;
 use DummyPresenterNamespace\DummyClassHttp as Presenter;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class DummyClassHttpTest extends TestCase
 {
