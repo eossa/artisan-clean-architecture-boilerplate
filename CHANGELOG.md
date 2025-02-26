@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.4.0...v1.5.0) (2025-02-26)
+
+
+### Features
+
+* **make test:** setUp method ([d25f814](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/d25f81446e2a76af0363e8a92c9123644c78ca0b))
+
 ## [1.4.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.3.4...v1.4.0) (2025-02-26)
 
 
