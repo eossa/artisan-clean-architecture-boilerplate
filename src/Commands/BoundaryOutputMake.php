@@ -3,6 +3,7 @@
 namespace WasiCo\ArtisanCleanArchitectureBoilerplate\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
 class BoundaryOutputMake extends GeneratorCommand
@@ -42,6 +43,7 @@ class BoundaryOutputMake extends GeneratorCommand
         if ($this->option('all')) {
             $this->input->setOption('presenter', true);
             $this->input->setOption('data', true);
+            $this->input->setOption('test', true);
         }
 
         if ($this->option('presenter')) {
@@ -62,8 +64,24 @@ class BoundaryOutputMake extends GeneratorCommand
     {
         $this->call('make:presenter', [
             'name' => $this->argument('name'),
+            'type' => $this->getPresenterType(),
+            '--test' => $this->option('test'),
             '--force' => $this->option('force'),
         ]);
+    }
+
+    private function getPresenterType()
+    {
+        if ($this->isHttp()) {
+            return 'http';
+        }
+        if ($this->isCli()) {
+            return 'cli';
+        }
+        if ($this->isJson()) {
+            return 'json';
+        }
+        return null;
     }
 
     /**
@@ -134,6 +152,20 @@ class BoundaryOutputMake extends GeneratorCommand
     }
 
     /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of the class'],
+
+            ['type', InputArgument::OPTIONAL, 'The type of the presenter', 'http'],
+        ];
+    }
+
+    /**
      * Get the console command options.
      *
      * @return array
@@ -147,7 +179,24 @@ class BoundaryOutputMake extends GeneratorCommand
 
             ['data', 'd', InputOption::VALUE_NONE, 'Create a new data for the output boundary'],
 
+            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the presenter'],
+
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the output boundary already exists.'],
         ];
+    }
+
+    private function isHttp()
+    {
+        return $this->argument('type') === 'http';
+    }
+
+    private function isJson()
+    {
+        return $this->argument('type') === 'json';
+    }
+
+    private function isCli()
+    {
+        return $this->argument('type') === 'cli';
     }
 }

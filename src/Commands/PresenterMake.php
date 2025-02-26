@@ -3,11 +3,22 @@
 namespace WasiCo\ArtisanCleanArchitectureBoilerplate\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputOption;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputOption;
 
 class PresenterMake extends GeneratorCommand
 {
+    const CLI = 'cli';
+    const HTTP = 'http';
+    const JSON = 'json';
+
+    const AVAILABLE_TYPES = [
+        self::CLI,
+        self::HTTP,
+        self::JSON,
+    ];
+
     /**
      * The name and signature of the console command.
      *
@@ -39,7 +50,31 @@ class PresenterMake extends GeneratorCommand
         if (parent::handle() === false && ! $this->option('force')) {
             return 1;
         }
+
+        if ($this->option('all')) {
+            $this->input->setOption('test', true);
+        }
+
+        if ($this->option('test')) {
+            $this->createTest();
+        }
         return 0;
+    }
+
+    /**
+     * Create a test for the presenter.
+     *
+     * @return void
+     */
+    protected function createTest()
+    {
+        $this->call('make:phpunit', [
+            'name' => $this->argument('name'),
+            '--http-presenter' => $this->isHttp(),
+            '--cli-presenter' => $this->isCli(),
+            // '--json-presenter' => $this->isJson(),
+            '--force' => $this->option('force'),
+        ]);
     }
 
     /**
@@ -49,13 +84,15 @@ class PresenterMake extends GeneratorCommand
      */
     protected function getStub()
     {
-        if ($this->option('json')) {
+        if ($this->isJson()) {
             return __DIR__ . '/stubs/presenter.json.stub';
         }
-        if ($this->option('cli')) {
+        if ($this->isCli()) {
             return __DIR__ . '/stubs/presenter.cli.stub';
         }
-        return __DIR__ . '/stubs/presenter.http.stub';
+        if ($this->isHttp()) {
+            return __DIR__ . '/stubs/presenter.http.stub';
+        }
     }
 
     /**
@@ -124,15 +161,31 @@ class PresenterMake extends GeneratorCommand
      */
     protected function getPath($name)
     {
-        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-        if ($this->option('json')) {
+        if ($this->isJson()) {
             $suffix = 'Json';
-        } elseif ($this->option('cli')) {
+        }
+        if ($this->isCli()) {
             $suffix = 'Cli';
-        } else {
+        }
+        if ($this->isHttp()) {
             $suffix = 'Http';
         }
+        $name = Str::replaceFirst($this->rootNamespace(), '', $name);
         return $this->laravel['path'] . '/' . str_replace('\\', '/', $name) . "$suffix.php";
+    }
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
+    protected function getArguments()
+    {
+        return [
+            ['name', InputArgument::REQUIRED, 'The name of the class'],
+
+            ['type', InputArgument::OPTIONAL, 'The type of the presenter', 'http'],
+        ];
     }
 
     /**
@@ -143,13 +196,26 @@ class PresenterMake extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['http', 'H', InputOption::VALUE_NONE, 'Generate an HTTP presenter'],
+            ['all', 'a', InputOption::VALUE_NONE, 'Generate all options for the output boundary'],
 
-            ['json', 'j', InputOption::VALUE_NONE, 'Generate a JSON presenter'],
-
-            ['cli', 'c', InputOption::VALUE_NONE, 'Generate a CLI presenter'],
+            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the presenter'],
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the presenter already exists.'],
         ];
+    }
+
+    private function isHttp()
+    {
+        return $this->argument('type') === 'http';
+    }
+
+    private function isJson()
+    {
+        return $this->argument('type') === 'json';
+    }
+
+    private function isCli()
+    {
+        return $this->argument('type') === 'cli';
     }
 }

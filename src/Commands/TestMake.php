@@ -36,6 +36,9 @@ class TestMake extends GeneratorCommand
      */
     public function handle()
     {
+        if ($this->option('presenter') && !$this->option('http-presenter') && !$this->option('cli-presenter')) {
+            $this->input->setOption('http-presenter', true);
+        }
         if (parent::handle() === false && ! $this->option('force')) {
             return 1;
         }
@@ -51,8 +54,15 @@ class TestMake extends GeneratorCommand
     protected function getPath($name)
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
+        $suffix = '';
+        if ($this->option('http-presenter')) {
+            $suffix = 'Http';
+        }
+        if ($this->option('cli-presenter')) {
+            $suffix = 'Cli';
+        }
 
-        return base_path('tests') . str_replace('\\', '/', $name) . 'Test.php';
+        return base_path('tests') . str_replace('\\', '/', $name) . "{$suffix}Test.php";
     }
 
     /**
@@ -75,6 +85,7 @@ class TestMake extends GeneratorCommand
                 'DummyUseCaseNamespace',
                 'DummyControllerNamespace',
                 'DummyRequestNamespace',
+                'DummyPresenterNamespace',
             ],
             [
                 $this->getNamespace($name),
@@ -86,6 +97,7 @@ class TestMake extends GeneratorCommand
                 $this->getUseCaseNamespace($name),
                 $this->getControllerNamespace($name),
                 $this->getRequestNamespace($name),
+                $this->getPresenterNamespace($name),
             ],
             $stub
         );
@@ -177,6 +189,18 @@ class TestMake extends GeneratorCommand
     }
 
     /**
+     * Get the presenter namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getPresenterNamespace(string $name): string
+    {
+        return $this->getSpecificNamespace($name, '\Infrastructure\Presenters', false);
+    }
+
+    /**
      * Get the default namespace for the class.
      *
      * @param  string  $rootNamespace
@@ -207,6 +231,12 @@ class TestMake extends GeneratorCommand
         if ($this->option('controller')) {
             return __DIR__ . '/stubs/unit_test.controller.stub';
         }
+        if ($this->option('cli-presenter')) {
+            return __DIR__ . '/stubs/unit_test.cli_presenter.stub';
+        }
+        if ($this->option('http-presenter')) {
+            return __DIR__ . '/stubs/unit_test.http_presenter.stub';
+        }
         if ($this->option('use-case')) {
             return __DIR__ . '/stubs/unit_test.use_case.stub';
         }
@@ -223,6 +253,12 @@ class TestMake extends GeneratorCommand
         return [
             ['controller', 'c', InputOption::VALUE_NONE, 'Generate a controller test'],
 
+            ['cli-presenter', 'C', InputOption::VALUE_NONE, 'Generate a CLI presenter test'],
+
+            ['http-presenter', 'H', InputOption::VALUE_NONE, 'Generate an HTTP presenter test'],
+
+            ['presenter', 'p', InputOption::VALUE_NONE, 'Generate a presenter test'],
+
             ['use-case', 'u', InputOption::VALUE_NONE, 'Generate a use case test'],
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the test already exists.'],
@@ -231,7 +267,10 @@ class TestMake extends GeneratorCommand
 
     private function isDefault(): bool
     {
-        return !$this->option('use-case') && !$this->option('controller');
+        return !$this->option('use-case')
+            && !$this->option('controller')
+            && !$this->option('cli-presenter')
+            && !$this->option('http-presenter');
     }
 
     private function getAppNamespace(string $name, bool $isDomain): string
@@ -250,6 +289,9 @@ class TestMake extends GeneratorCommand
     {
         if ($this->option('controller')) {
             return '\Infrastructure\Controllers';
+        }
+        if ($this->option('cli-presenter') || $this->option('http-presenter')) {
+            return '\Infrastructure\Presenters';
         }
         if ($this->option('use-case')) {
             return '\Domain\UseCases';

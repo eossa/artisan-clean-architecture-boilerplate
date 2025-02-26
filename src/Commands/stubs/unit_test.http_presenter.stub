@@ -1,0 +1,33 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use DummyOutputDataNamespace\DummyClass as Data;
+use DummyPresenterNamespace\DummyClassHttp as Presenter;
+use PHPUnit\Framework\TestCase;
+
+class DummyClassHttpTest extends TestCase
+{
+    /**
+     * @var Presenter
+     */
+    private $presenter;
+
+    protected function setUp()
+    {
+        $this->presenter = new Presenter();
+    }
+
+    public function testEnsureReturnEmptySuccess()
+    {
+        $viewModel = $this->presenter->done(new Data());
+
+        $this->assertInstanceOf(Response::class, $viewModel->render());
+        $this->assertEquals(
+            '',
+            $viewModel->render()->getContent()
+        );
+    }
+}

@@ -1,0 +1,37 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use DummyOutputDataNamespace\DummyClass as Data;
+use DummyPresenterNamespace\DummyClassCli as Presenter;
+use Illuminate\Console\Command;
+use PHPUnit\Framework\TestCase;
+
+class DummyClassCliTest extends TestCase
+{
+    /**
+     * @var \Phrophecy\Prophecy\ObjectProphecy
+     */
+    private $command;
+
+    /**
+     * @var Presenter
+     */
+    private $presenter;
+
+    protected function setUp()
+    {
+        $this->command = $this->prophesize(Command::class);
+        $this->presenter = new Presenter();
+    }
+
+    public function testEnsurePrintDone()
+    {
+        $viewModel = $this->presenter->made(new Data());
+
+        $this->assertSame(0, $viewModel->render($this->command->reveal()));
+        $this->command->info('Done')->shouldHaveBeenCalled();
+    }
+}

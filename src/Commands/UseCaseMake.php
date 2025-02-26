@@ -64,6 +64,7 @@ class UseCaseMake extends GeneratorCommand
             'name' => $this->argument('name'),
             '--presenter' => $this->option('presenter'),
             '--data' => $this->option('output-data'),
+            '--test' => $this->option('test'),
             '--force' => $this->option('force'),
         ]);
     }
@@ -190,13 +191,13 @@ class UseCaseMake extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['all', 'a', InputOption::VALUE_NONE, 'Generate a presenter for the use case'],
+            ['all', 'a', InputOption::VALUE_NONE, 'Generate all options for the use case'],
 
             ['presenter', 'p', InputOption::VALUE_NONE, 'Generate a presenter for the use case'],
 
             ['output-data', 'o', InputOption::VALUE_NONE, 'Generate an output data for the use case'],
 
-            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the use case'],
+            ['test', 't', InputOption::VALUE_NONE, 'Generate a test for the use case and the presenter'],
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the use case already exists.'],
         ];

@@ -148,7 +148,7 @@ class BoundaryInputMake extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['all', 'a', InputOption::VALUE_NONE, 'Generate a use case with a presenter for the input boundary'],
+            ['all', 'a', InputOption::VALUE_NONE, 'Generate a use case with all options for the input boundary'],
 
             ['input-data', 'i', InputOption::VALUE_NONE, 'Create a new input data for the input boundary'],
 
