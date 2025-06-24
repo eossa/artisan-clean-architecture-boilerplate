@@ -28,11 +28,6 @@ class UseCaseMake extends GeneratorCommand
      */
     protected $type = 'Use Case';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
         if (parent::handle() === false && ! $this->option('force')) {
@@ -126,10 +121,6 @@ class UseCaseMake extends GeneratorCommand
 
     /**
      * Get the input boundary namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getInputBoundaryNamespace(string $name): string
     {
@@ -138,10 +129,6 @@ class UseCaseMake extends GeneratorCommand
 
     /**
      * Get the output boundary namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getOutputBoundaryNamespace(string $name): string
     {
@@ -150,10 +137,6 @@ class UseCaseMake extends GeneratorCommand
 
     /**
      * Get the input data namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getInputDataNamespace(string $name): string
     {
@@ -162,10 +145,6 @@ class UseCaseMake extends GeneratorCommand
 
     /**
      * Get the output data namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getOutputDataNamespace(string $name): string
     {

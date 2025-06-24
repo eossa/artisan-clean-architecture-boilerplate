@@ -6,13 +6,12 @@ namespace DummyNamespace;
 
 use DummyBoundaryNamespace\DummyClass as OutputBoundary;
 use DummyDataNamespace\DummyClass as Data;
-use App\Domain\ViewModel;
-use App\Infrastructure\ViewModels\JsonResource;
+use DummyViewModelNamespace\DummyClass as ViewModel;
 
-class DummyClassJson implements OutputBoundary
+class DummyClass implements OutputBoundary
 {
     public function done(Data $data): ViewModel
     {
-        return new JsonResource($resource);
+        return new ViewModel();
     }
 }

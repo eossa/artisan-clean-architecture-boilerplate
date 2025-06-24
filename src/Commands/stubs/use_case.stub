@@ -8,7 +8,7 @@ use DummyInputBoundaryNamespace\DummyClass as InputBoundary;
 use DummyOutputBoundaryNamespace\DummyClass as OutputBoundary;
 use DummyInputDataNamespace\DummyClass as InputData;
 use DummyOutputDataNamespace\DummyClass as OutputData;
-use App\Domain\ViewModel;
+use DummyViewModelNamespace\DummyClass as ViewModel;
 
 class DummyClass implements InputBoundary
 {

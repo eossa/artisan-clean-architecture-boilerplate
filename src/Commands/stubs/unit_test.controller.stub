@@ -10,6 +10,7 @@ use App\Domain\ViewModel;
 use DummyControllerNamespace\DummyClassController as Controller;
 use DummyRequestNamespace\DummyClass as Request;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Tests\Builders\RequestBuilder;
 
 class DummyClassTest extends TestCase
@@ -20,21 +21,14 @@ class DummyClassTest extends TestCase
     private $controller;
 
     /**
-     * @var \Prophecy\Prophecy\ObjectProphecy
+     * @var ObjectProphecy|InputBoundary
      */
     private $useCase;
 
     /**
-     * @var \Prophecy\Prophecy\ObjectProphecy
+     * @var ObjectProphecy|ViewModel
      */
     private $viewModel;
-
-    protected function setUp()
-    {
-        $this->useCase = $this->prophesize(InputBoundary::class);
-        $this->viewModel = $this->prophesize(ViewModel::class);
-        $this->controller = new Controller($this->useCase->reveal());
-    }
 
     public function testEnsureUseCaseIsCalled()
     {
@@ -53,5 +47,12 @@ class DummyClassTest extends TestCase
         $this->assertEquals('OK', $response);
         $this->useCase->do(new Data())->shouldHaveBeenCalled();
         $this->viewModel->render()->shouldHaveBeenCalled();
+    }
+
+    protected function setUp()
+    {
+        $this->useCase = $this->prophesize(InputBoundary::class);
+        $this->viewModel = $this->prophesize(ViewModel::class);
+        $this->controller = new Controller($this->useCase->reveal());
     }
 }

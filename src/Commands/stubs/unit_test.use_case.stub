@@ -8,13 +8,14 @@ use DummyOutputBoundaryNamespace\DummyClass as OutputBoundary;
 use DummyInputDataNamespace\DummyClass as InputData;
 use DummyOutputDataNamespace\DummyClass as OutputData;
 use DummyUseCaseNamespace\DummyClass as UseCase;
-use App\Domain\ViewModel;
+use DummyViewModelNamespace\DummyClass as ViewModel;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 
 class DummyClassTest extends TestCase
 {
     /**
-     * @var \Prophecy\Prophecy\ObjectProphecy
+     * @var ObjectProphecy|OutputBoundary
      */
     private $output;
 
@@ -23,24 +24,19 @@ class DummyClassTest extends TestCase
      */
     private $useCase;
 
-    /**
-     * @var \Prophecy\Prophecy\ObjectProphecy
-     */
-    private $viewModel;
+    public function testDo()
+    {
+        $this->output->done(new OutputData())->willReturn(new ViewModel());
+
+        $viewModel = $this->useCase->do(new InputData());
+
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+        $this->output->done(new OutputData())->shouldHaveBeenCalled();
+    }
 
     protected function setUp()
     {
-        $this->viewModel = $this->prophesize(ViewModel::class);
         $this->output = $this->prophesize(OutputBoundary::class);
         $this->useCase = new UseCase($this->output->reveal());
-    }
-
-    public function testEnsureIsDone()
-    {
-        $this->output->done(new OutputData())->willReturn($this->viewModel->reveal());
-
-        $this->useCase->do(new InputData());
-
-        $this->output->done(new OutputData())->shouldHaveBeenCalled();
     }
 }

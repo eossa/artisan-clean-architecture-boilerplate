@@ -31,10 +31,7 @@ class TestMake extends GeneratorCommand
 
     public function handle()
     {
-        if ($this->option('presenter') && !$this->option('http-presenter') && !$this->option('cli-presenter')) {
-            $this->input->setOption('http-presenter', true);
-        }
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return 1;
         }
         return 0;
@@ -49,22 +46,15 @@ class TestMake extends GeneratorCommand
     protected function getPath($name)
     {
         $name = Str::replaceFirst($this->rootNamespace(), '', $name);
-        $suffix = '';
-        if ($this->option('http-presenter')) {
-            $suffix = 'Http';
-        }
-        if ($this->option('cli-presenter')) {
-            $suffix = 'Cli';
-        }
 
-        return base_path('tests') . str_replace('\\', '/', $name) . "{$suffix}Test.php";
+        return base_path('tests') . str_replace('\\', '/', $name) . "Test.php";
     }
 
     /**
      * Replace the namespace for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
      * @return $this
      */
     protected function replaceNamespace(&$stub, $name)
@@ -81,6 +71,7 @@ class TestMake extends GeneratorCommand
                 'DummyControllerNamespace',
                 'DummyRequestNamespace',
                 'DummyPresenterNamespace',
+                'DummyViewModelNamespace',
             ],
             [
                 $this->getNamespace($name),
@@ -93,6 +84,7 @@ class TestMake extends GeneratorCommand
                 $this->getControllerNamespace($name),
                 $this->getRequestNamespace($name),
                 $this->getPresenterNamespace($name),
+                $this->getViewModelNamespace($name),
             ],
             $stub
         );
@@ -101,10 +93,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the input boundary namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getInputBoundaryNamespace(string $name): string
     {
@@ -113,10 +101,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the output boundary namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getOutputBoundaryNamespace(string $name): string
     {
@@ -125,10 +109,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the input data namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getInputDataNamespace(string $name): string
     {
@@ -137,10 +117,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the output data namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getOutputDataNamespace(string $name): string
     {
@@ -149,10 +125,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the use case namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getUseCaseNamespace(string $name): string
     {
@@ -161,10 +133,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the controller namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getControllerNamespace(string $name): string
     {
@@ -173,10 +141,6 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the request namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getRequestNamespace(string $name): string
     {
@@ -185,20 +149,24 @@ class TestMake extends GeneratorCommand
 
     /**
      * Get the presenter namespace for the class.
-     *
-     * @param string $name
-     *
-     * @return string
      */
     protected function getPresenterNamespace(string $name): string
     {
-        return $this->getSpecificNamespace($name, '\Infrastructure\Presenters', false);
+        return $this->getSpecificNamespace($name, '\Presenters');
+    }
+
+    /**
+     * Get the view model namespace for the class.
+     */
+    protected function getViewModelNamespace(string $name): string
+    {
+        return $this->getSpecificNamespace($name, '\ViewModels');
     }
 
     /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
@@ -226,11 +194,8 @@ class TestMake extends GeneratorCommand
         if ($this->option('controller')) {
             return __DIR__ . '/stubs/unit_test.controller.stub';
         }
-        if ($this->option('cli-presenter')) {
-            return __DIR__ . '/stubs/unit_test.cli_presenter.stub';
-        }
-        if ($this->option('http-presenter')) {
-            return __DIR__ . '/stubs/unit_test.http_presenter.stub';
+        if ($this->option('presenter')) {
+            return __DIR__ . '/stubs/unit_test.presenter.stub';
         }
         if ($this->option('use-case')) {
             return __DIR__ . '/stubs/unit_test.use_case.stub';
@@ -248,10 +213,6 @@ class TestMake extends GeneratorCommand
         return [
             ['controller', 'c', InputOption::VALUE_NONE, 'Generate a controller test'],
 
-            ['cli-presenter', 'C', InputOption::VALUE_NONE, 'Generate a CLI presenter test'],
-
-            ['http-presenter', 'H', InputOption::VALUE_NONE, 'Generate an HTTP presenter test'],
-
             ['presenter', 'p', InputOption::VALUE_NONE, 'Generate a presenter test'],
 
             ['use-case', 'u', InputOption::VALUE_NONE, 'Generate a use case test'],
@@ -264,8 +225,7 @@ class TestMake extends GeneratorCommand
     {
         return !$this->option('use-case')
             && !$this->option('controller')
-            && !$this->option('cli-presenter')
-            && !$this->option('http-presenter');
+            && !$this->option('presenter');
     }
 
     private function getAppNamespace(string $name, bool $isDomain): string
@@ -282,8 +242,8 @@ class TestMake extends GeneratorCommand
         if ($this->option('controller')) {
             return '\Infrastructure\Controllers';
         }
-        if ($this->option('cli-presenter') || $this->option('http-presenter')) {
-            return '\Infrastructure\Presenters';
+        if ($this->option('presenter')) {
+            return '\Domain\Presenters';
         }
         if ($this->option('use-case')) {
             return '\Domain\UseCases';

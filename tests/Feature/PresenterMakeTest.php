@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
 
 class PresenterMakeTest extends TestCase
@@ -9,7 +10,7 @@ class PresenterMakeTest extends TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      *
      * @return array
      */
@@ -18,130 +19,80 @@ class PresenterMakeTest extends TestCase
         return ['WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
     }
 
-    public function testEnsureDefaultIsCreated()
+    public function testEnsureIsCreated()
     {
         $this->artisan('make:presenter', ['name' => 'Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
-    public function testEnsureExistingDefaultIsNotCreated()
+    public function testEnsureExistingIsNotCreated()
     {
         $this->artisan('make:presenter', ['name' => 'Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
         $this->artisan('make:presenter', ['name' => 'Example'])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
-    public function testEnsureDefaultIsOverwritenWhenAlreadyExists()
+    public function testEnsureIsOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:presenter', ['name' => 'Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
         $this->artisan('make:presenter', ['name' => 'Example', '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
-    public function testEnsureHttpIsCreated()
+    public function testEnsureNamespacedIsCreated()
     {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http'])
+        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertPresenterContent('\\Admin');
+        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
     }
 
-    public function testEnsureExistingHttpIsNotCreated()
+    public function testEnsureExistingNamespacedIsNotCreated()
     {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http'])
+        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http'])
+        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertPresenterContent('\\Admin');
+        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
     }
 
-    public function testEnsureHttpIsOverwritenWhenAlreadyExists()
+    public function testEnsureNamespacedIsOverwrittenWhenAlreadyExists()
     {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http'])
+        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--force' => true])
+        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertPresenterContent('\\Admin');
+        $this->artisan('make:presenter', ['name' => 'Admin/Example', '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-    }
-
-    public function testEnsureCliIsCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-    }
-
-    public function testEnsureExistingCliIsNotCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli'])
-            ->expectsOutput('Presenter already exists!')
-            ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-    }
-
-    public function testEnsureCliIsOverwritenWhenAlreadyExists()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--force' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-    }
-
-    public function testEnsureJsonIsCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
-    }
-
-    public function testEnsureExistingJsonIsNotCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json'])
-            ->expectsOutput('Presenter already exists!')
-            ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
-    }
-
-    public function testEnsureJsonIsOverwritenWhenAlreadyExists()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json'])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--force' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertPresenterContent('\\Admin');
+        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
     }
 
     public function testEnsureAllIsCreated()
@@ -150,10 +101,11 @@ class PresenterMakeTest extends TestCase
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
     }
 
     public function testEnsureExistingAllIsNotCreated()
@@ -162,157 +114,61 @@ class PresenterMakeTest extends TestCase
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
     }
 
-    public function testEnsureAllIsOverwritenWhenAlreadyExists()
+    public function testEnsureAllIsOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->artisan('make:presenter', ['name' => 'Example', '--all' => true, '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertPresenterContent();
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
     }
 
-    public function testEnsureAllHttpIsCreated()
+    private function assertPresenterContent(string $namespace = '')
     {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-    }
+        $fileNamespace = str_replace('\\', '/', $namespace);
+        $this->assertStringEqualsFile(
+            app_path("Domain/Presenters$fileNamespace/Example.php"),
+            <<<PHP
+<?php
 
-    public function testEnsureExistingAllHttpIsNotCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--all' => true])
-            ->expectsOutput('Presenter already exists!')
-            ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-    }
+declare(strict_types=1);
 
-    public function testEnsureAllHttpIsOverwritenWhenAlreadyExists()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'http', '--all' => true, '--force' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
-    }
+namespace App\Domain\Presenters$namespace;
 
-    public function testEnsureAllCliIsCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
-    }
+use App\Domain\Boundaries\Output$namespace\Example as OutputBoundary;
+use App\Domain\Data\Output$namespace\Example as Data;
+use App\Domain\ViewModels$namespace\Example as ViewModel;
 
-    public function testEnsureExistingAllCliIsNotCreated()
+class Example implements OutputBoundary
+{
+    public function done(Data \$data): ViewModel
     {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--all' => true])
-            ->expectsOutput('Presenter already exists!')
-            ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
+        return new ViewModel();
     }
+}
 
-    public function testEnsureAllCliIsOverwritenWhenAlreadyExists()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'cli', '--all' => true, '--force' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleCli.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleCliTest.php'));
-    }
-
-    public function testEnsureAllJsonIsCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
-    }
-
-    public function testEnsureExistingAllJsonIsNotCreated()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--all' => true])
-            ->expectsOutput('Presenter already exists!')
-            ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
-    }
-
-    public function testEnsureAllJsonIsOverwritenWhenAlreadyExists()
-    {
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--all' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->assertFileExists(base_path('tests/Unit/ExampleTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', 'type' => 'json', '--all' => true, '--force' => true])
-            ->expectsOutput('Presenter created successfully.')
-            ->expectsOutput('Test created successfully.')
-            ->assertExitCode(0);
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleJson.php'));
-        $this->app['files']->delete(base_path('tests/Unit/ExampleTest.php'));
+PHP
+        );
     }
 }

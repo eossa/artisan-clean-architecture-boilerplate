@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
 
 class UseCaseMakeTest extends TestCase
@@ -9,7 +10,7 @@ class UseCaseMakeTest extends TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      *
      * @return array
      */
@@ -30,7 +31,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
     }
 
-    public function testEnsureBaseAndOutputBoundaryAreNotOverwriten()
+    public function testEnsureBaseAndOutputBoundaryAreNotOverwritten()
     {
         $this->artisan('make:use-case', ['name' => 'Example'])
             ->expectsOutput('Use Case created successfully.')
@@ -45,7 +46,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
     }
 
-    public function testEnsureBaseAndOutputBoundaryAreOverwritenWhenAlreadyExists()
+    public function testEnsureBaseAndOutputBoundaryAreOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:use-case', ['name' => 'Example'])
             ->expectsOutput('Use Case created successfully.')
@@ -78,7 +79,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndDataAreNotOverwriten()
+    public function testEnsureBaseOutputBoundaryAndDataAreNotOverwritten()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--output-data' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -96,7 +97,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndDataAreOverwritenWhenAlreadyExists()
+    public function testEnsureBaseOutputBoundaryAndDataAreOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--output-data' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -134,7 +135,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreNotOverwriten()
+    public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreNotOverwritten()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--presenter' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -152,7 +153,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreOverwritenWhenAlreadyExists()
+    public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--presenter' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -190,7 +191,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndTestAreNotOverwriten()
+    public function testEnsureBaseOutputBoundaryAndTestAreNotOverwritten()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--test' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -208,7 +209,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
-    public function testEnsureBaseOutputBoundaryAndTestAreOverwritenWhenAlreadyExists()
+    public function testEnsureBaseOutputBoundaryAndTestAreOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--test' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -255,7 +256,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
-    public function testEnsureAllAreNotOverwriten()
+    public function testEnsureAllAreNotOverwritten()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--all' => true])
             ->expectsOutput('Use Case created successfully.')
@@ -282,7 +283,7 @@ class UseCaseMakeTest extends TestCase
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
 
-    public function testEnsureAllAreOverwritenWhenAlreadyExists()
+    public function testEnsureAllAreOverwrittenWhenAlreadyExists()
     {
         $this->artisan('make:use-case', ['name' => 'Example', '--all' => true])
             ->expectsOutput('Use Case created successfully.')

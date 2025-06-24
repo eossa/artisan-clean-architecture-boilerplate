@@ -5,30 +5,27 @@ declare(strict_types=1);
 namespace DummyNamespace;
 
 use DummyOutputDataNamespace\DummyClass as Data;
-use DummyPresenterNamespace\DummyClassHttp as Presenter;
+use DummyPresenterNamespace\DummyClass as Presenter;
+use DummyViewModelNamespace\DummyClass as ViewModel;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-class DummyClassHttpTest extends TestCase
+class DummyClassTest extends TestCase
 {
     /**
      * @var Presenter
      */
     private $presenter;
 
-    protected function setUp()
-    {
-        $this->presenter = new Presenter();
-    }
-
     public function testEnsureReturnEmptySuccess()
     {
         $viewModel = $this->presenter->done(new Data());
 
-        $this->assertInstanceOf(Response::class, $viewModel->render());
-        $this->assertEquals(
-            '',
-            $viewModel->render()->getContent()
-        );
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
+    }
+
+    protected function setUp()
+    {
+        $this->presenter = new Presenter();
     }
 }
