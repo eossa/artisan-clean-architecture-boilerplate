@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.5.1...v1.6.0) (2025-06-24)
+
+
+### Features
+
+* **composer:** add autoload-dev section for test classes ([81a59cc](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/81a59cc1a70ca93691b69c06721ed9eb11cd831a))
+* **ViewModelMake:** add command to generate view model classes ([e249194](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/e249194526c045ca66512152f684d1c1af225698))
+
+
+### Bug Fixes
+
+* **test:** failing ([b2c8e2a](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/b2c8e2ab5c2445b64dd480571f0980f4083383e4))
+* **TestMake:** Missing version namespace prefix ([530e3df](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/530e3df45badffd9f76f7b79b9d54453fb477b0d))
+* **TestMakeTest:** update namespace imports for clarity and consistency ([04d02a6](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/04d02a65409563d4b2970943d8111d132a88b7dc))
+
 ### [1.5.1](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.5.0...v1.5.1) (2025-02-26)
 
 
