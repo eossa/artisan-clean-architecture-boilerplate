@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase;
 
 class TestMakeTest extends TestCase
@@ -11,7 +12,7 @@ class TestMakeTest extends TestCase
     /**
      * Get package providers.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param  Application  $app
      *
      * @return array
      */
@@ -488,8 +489,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Infrastructure\Controllers$namespace;
 
-use App\Domain\Boundaries\Input\Example as InputBoundary;
-use App\Domain\Data\Input\Example as Data;
+use App\Domain\Boundaries\Input$namespace\Example as InputBoundary;
+use App\Domain\Data\Input$namespace\Example as Data;
 use App\Domain\ViewModel;
 use App\Http\Controllers$namespace\ExampleController as Controller;
 use App\Http\Requests$namespace\Example as Request;
