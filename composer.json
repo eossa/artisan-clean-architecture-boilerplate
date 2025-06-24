@@ -31,6 +31,11 @@
       "WasiCo\\ArtisanCleanArchitectureBoilerplate\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "scripts": {
     "release": "composer run test && npx standard-version && curl --fail-with-body --data tag=$(git describe --tags $(git rev-list --tags --max-count=1)) \"https://__token__:$GITLAB_PERSONAL_ACCESS_TOKEN@gitlab.com/api/v4/projects/62170448/packages/composer\"",
     "test": "vendor/bin/phpunit",
