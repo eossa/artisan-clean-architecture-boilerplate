@@ -29,11 +29,6 @@ class TestMake extends GeneratorCommand
      */
     protected $type = 'Test';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
         if ($this->option('presenter') && !$this->option('http-presenter') && !$this->option('cli-presenter')) {
@@ -275,9 +270,6 @@ class TestMake extends GeneratorCommand
 
     private function getAppNamespace(string $name, bool $isDomain): string
     {
-        if ($isDomain) {
-            $name = preg_replace('/\\\\v[0-9]+\\\\/i', '\\', $name);
-        }
         return str_replace(
             $this->rootNamespace() . '\Unit',
             trim($this->laravel->getNamespace(), '\\') . ($isDomain ? '\Domain' : ''),
@@ -285,7 +277,7 @@ class TestMake extends GeneratorCommand
         );
     }
 
-    private function getOptionNamespace()
+    private function getOptionNamespace(): string
     {
         if ($this->option('controller')) {
             return '\Infrastructure\Controllers';
