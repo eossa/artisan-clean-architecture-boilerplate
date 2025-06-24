@@ -5,28 +5,28 @@ namespace WasiCo\ArtisanCleanArchitectureBoilerplate\Commands;
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
-class DataInputMake extends GeneratorCommand
+class ViewModelMake extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $name = 'make:data:input';
+    protected $name = 'make:view-model';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new input data class';
+    protected $description = 'Create a new view model class';
 
     /**
      * The type of class being generated.
      *
      * @var string
      */
-    protected $type = 'Input Data';
+    protected $type = 'ViewModel';
 
     public function handle()
     {
@@ -43,7 +43,7 @@ class DataInputMake extends GeneratorCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/data.input.stub';
+        return __DIR__ . '/stubs/view_model.stub';
     }
 
     /**
@@ -54,7 +54,7 @@ class DataInputMake extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Domain\Data\Input';
+        return $rootNamespace . '\Domain\ViewModels';
     }
 
     /**
@@ -65,7 +65,7 @@ class DataInputMake extends GeneratorCommand
     protected function getOptions()
     {
         return [
-            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the input data already exists.'],
+            ['force', null, InputOption::VALUE_NONE, 'Create the class even if the view model already exists.'],
         ];
     }
 }

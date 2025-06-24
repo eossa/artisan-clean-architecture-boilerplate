@@ -28,11 +28,6 @@ class EntityMake extends GeneratorCommand
      */
     protected $type = 'Entity';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
         if (parent::handle() === false && ! $this->option('force')) {
