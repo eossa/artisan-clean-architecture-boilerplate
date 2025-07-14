@@ -78,17 +78,6 @@ class BoundaryOutputMake extends GeneratorCommand
         ]);
     }
 
-    protected function replaceClass($stub, $name)
-    {
-        $stub = parent::replaceClass($stub, $name);
-        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
-        foreach (['Get', 'Edit', 'Create', 'Delete'] as $word) {
-            $class = Str::replaceFirst($word, '', $class);
-        }
-        $class = Str::singular($class);
-        return str_replace('DummyViewModelClass', $class, $stub);
-    }
-
     /**
      * Get the stub file for the generator.
      *
@@ -143,6 +132,17 @@ class BoundaryOutputMake extends GeneratorCommand
     protected function getViewModelNamespace(string $name): string
     {
         return str_replace('Boundaries\Output', 'ViewModels', $this->getNamespace($name));
+    }
+
+    protected function replaceClass($stub, $name)
+    {
+        $stub = parent::replaceClass($stub, $name);
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        foreach (['Get', 'Edit', 'Create', 'Delete'] as $word) {
+            $class = Str::replaceFirst($word, '', $class);
+        }
+        $class = Str::singular($class);
+        return str_replace('DummyViewModelClass', $class, $stub);
     }
 
     /**

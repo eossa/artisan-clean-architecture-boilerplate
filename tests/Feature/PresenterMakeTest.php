@@ -10,7 +10,7 @@ class PresenterMakeTest extends TestCase
     /**
      * Get package providers.
      *
-     * @param  Application  $app
+     * @param Application $app
      *
      * @return array
      */
@@ -19,136 +19,191 @@ class PresenterMakeTest extends TestCase
         return ['WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
     }
 
-    public function testEnsureIsCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureIsCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureExistingIsNotCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureExistingIsNotCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->artisan('make:presenter', ['name' => 'Example'])
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->artisan('make:presenter', ['name' => $className])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureIsOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureIsOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->artisan('make:presenter', ['name' => 'Example', '--force' => true])
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->artisan('make:presenter', ['name' => $className, '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureNamespacedIsCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedIsCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => "Admin/$className"])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
-        $this->assertPresenterContent('\\Admin');
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName, '\\Admin');
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureExistingNamespacedIsNotCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureExistingNamespacedIsNotCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => "Admin/$className"])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
-        $this->assertPresenterContent('\\Admin');
-        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName, '\\Admin');
+        $this->artisan('make:presenter', ['name' => "Admin/$className"])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedIsOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedIsOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Admin/Example'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => "Admin/$className"])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
-        $this->assertPresenterContent('\\Admin');
-        $this->artisan('make:presenter', ['name' => 'Admin/Example', '--force' => true])
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName, '\\Admin');
+        $this->artisan('make:presenter', ['name' => "Admin/$className", '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/Example.php'));
-        $this->assertPresenterContent('\\Admin');
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/Example.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName, '\\Admin');
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureAllIsCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureAllIsCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className, '--all' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
     }
 
-    public function testEnsureExistingAllIsNotCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureExistingAllIsNotCreated(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className, '--all' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->artisan('make:presenter', ['name' => $className, '--all' => true])
             ->expectsOutput('Presenter already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
     }
 
-    public function testEnsureAllIsOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureAllIsOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:presenter', ['name' => 'Example', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:presenter', ['name' => $className, '--all' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
-        $this->artisan('make:presenter', ['name' => 'Example', '--all' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->artisan('make:presenter', ['name' => $className, '--all' => true, '--force' => true])
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
-        $this->assertPresenterContent();
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertPresenterContent($className, $viewModelClassName);
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
     }
 
-    private function assertPresenterContent(string $namespace = '')
+    public function provider(): array
+    {
+        return [
+            ['Create'],
+            ['Edit'],
+            ['Delete'],
+            ['Get'],
+        ];
+    }
+
+    private function assertPresenterContent(string $className, $viewModelClassName, string $namespace = '')
     {
         $fileNamespace = str_replace('\\', '/', $namespace);
         $this->assertStringEqualsFile(
-            app_path("Domain/Presenters$fileNamespace/Example.php"),
+            app_path("Domain/Presenters$fileNamespace/$className.php"),
             <<<PHP
 <?php
 
@@ -156,11 +211,11 @@ declare(strict_types=1);
 
 namespace App\Domain\Presenters$namespace;
 
-use App\Domain\Boundaries\Output$namespace\Example as OutputBoundary;
-use App\Domain\Data\Output$namespace\Example as Data;
-use App\Domain\ViewModels$namespace\Example as ViewModel;
+use App\Domain\Boundaries\Output$namespace\\$className as OutputBoundary;
+use App\Domain\Data\Output$namespace\\$className as Data;
+use App\Domain\ViewModels$namespace\\$viewModelClassName as ViewModel;
 
-class Example implements OutputBoundary
+class $className implements OutputBoundary
 {
     public function done(Data \$data): ViewModel
     {

@@ -132,6 +132,17 @@ class PresenterMake extends GeneratorCommand
         return str_replace('Domain\Presenters', 'Domain\ViewModels', $this->getNamespace($name));
     }
 
+    protected function replaceClass($stub, $name)
+    {
+        $stub = parent::replaceClass($stub, $name);
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        foreach (['Get', 'Edit', 'Create', 'Delete'] as $word) {
+            $class = Str::replaceFirst($word, '', $class);
+        }
+        $class = Str::singular($class);
+        return str_replace('DummyViewModelClass', $class, $stub);
+    }
+
     /**
      * Get the default namespace for the class.
      *

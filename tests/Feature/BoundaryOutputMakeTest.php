@@ -19,418 +19,548 @@ class BoundaryOutputMakeTest extends TestCase
         return ['WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
     }
 
-    public function testEnsureBaseIsCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseIsCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
     }
 
-    public function testEnsureExistingBaseIsNotCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureExistingBaseIsNotCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'EditExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/EditExample.php'));
-        $this->assertOutputBoundaryContent('EditExample', 'Example');
-        $this->artisan('make:boundary:output', ['name' => 'EditExample'])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->artisan('make:boundary:output', ['name' => $className])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/EditExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
     }
 
-    public function testEnsureBaseIsOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseIsOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'DeleteExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/DeleteExample.php'));
-        $this->assertOutputBoundaryContent('DeleteExample', 'Example');
-        $this->artisan('make:boundary:output', ['name' => 'DeleteExample', '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->artisan('make:boundary:output', ['name' => $className, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/DeleteExample.php'));
-        $this->assertOutputBoundaryContent('DeleteExample', 'Example');
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/DeleteExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
     }
 
-    public function testEnsureBaseAndDataAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDataAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'GetExamples', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/GetExamples.php'));
-        $this->assertOutputBoundaryContent('GetExamples', 'Example');
-        $this->assertFileExists(app_path('Domain/Data/Output/GetExamples.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/GetExamples.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/GetExamples.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureBaseAndDataAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDataAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--data' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--data' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureBaseAndDataAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDataAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--data' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--data' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureBaseAndDefaultPresenterAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDefaultPresenterAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureBaseAndDefaultPresenterAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDefaultPresenterAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--presenter' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--presenter' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureBaseAndDefaultPresenterAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureBaseAndDefaultPresenterAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--presenter' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--presenter' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
     }
 
-    public function testEnsureAllAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureAllAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureAllAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureAllAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--all' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--all' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureAllAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureAllAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => $className, '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'CreateExample', '--all' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => $className, '--all' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example');
-        $this->assertFileExists(app_path('Domain/Presenters/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName);
+        $this->assertFileExists(app_path("Domain/Presenters/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseIsCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseIsCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className"])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedExistingBaseIsNotCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedExistingBaseIsNotCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className"])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample'])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className"])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseIsOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseIsOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample'])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className"])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDataAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDataAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDataAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDataAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--data' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--data' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDataAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDataAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--data' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--data' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--data' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--data' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDefaultPresenterAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDefaultPresenterAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDefaultPresenterAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDefaultPresenterAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--presenter' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--presenter' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedBaseAndDefaultPresenterAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedBaseAndDefaultPresenterAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--presenter' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--presenter' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--presenter' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--presenter' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedAllAreCreated()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedAllAreCreated(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedAllAreNotOverwritten()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedAllAreNotOverwritten(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--all' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--all' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
     }
 
-    public function testEnsureNamespacedAllAreOverwrittenWhenAlreadyExists()
+    /**
+     * @dataProvider provider
+     */
+    public function testEnsureNamespacedAllAreOverwrittenWhenAlreadyExists(string $method)
     {
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--all' => true])
+        $viewModelClassName = 'Example';
+        $className = $method . $viewModelClassName . ($method === 'Get' ? 's' : '');
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--all' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->artisan('make:boundary:output', ['name' => 'Admin/CreateExample', '--all' => true, '--force' => true])
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->artisan('make:boundary:output', ['name' => "Admin/$className", '--all' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->expectsOutput('Test created successfully.')
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
-        $this->assertFileExists(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->assertOutputBoundaryContent('CreateExample', 'Example', '\\Admin');
-        $this->assertFileExists(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->assertFileExists(app_path('Domain/Data/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Boundaries/Output/Admin/CreateExample.php'));
-        $this->app['files']->delete(app_path('Domain/Presenters/Admin/CreateExample.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/Admin/CreateExampleTest.php'));
-        $this->app['files']->delete(app_path('Domain/Data/Output/Admin/CreateExample.php'));
+        $this->assertFileExists(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->assertOutputBoundaryContent($className, $viewModelClassName, '\\Admin');
+        $this->assertFileExists(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->assertFileExists(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->assertFileExists(app_path("Domain/Data/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Boundaries/Output/Admin/$className.php"));
+        $this->app['files']->delete(app_path("Domain/Presenters/Admin/$className.php"));
+        $this->app['files']->delete(base_path("tests/Unit/Domain/Presenters/Admin/{$className}Test.php"));
+        $this->app['files']->delete(app_path("Domain/Data/Output/Admin/$className.php"));
+    }
+
+    public function provider(): array
+    {
+        return [
+            ['Create'],
+            ['Edit'],
+            ['Delete'],
+            ['Get'],
+        ];
     }
 
     private function assertOutputBoundaryContent(string $className, $viewModelClassName, string $namespace = '')

@@ -6,7 +6,7 @@ namespace DummyNamespace;
 
 use DummyBoundaryNamespace\DummyClass as OutputBoundary;
 use DummyDataNamespace\DummyClass as Data;
-use DummyViewModelNamespace\DummyClass as ViewModel;
+use DummyViewModelNamespace\DummyViewModelClass as ViewModel;
 
 class DummyClass implements OutputBoundary
 {
