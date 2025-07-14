@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.7.0...v1.8.0) (2025-07-14)
+
+
+### Features
+
+* **make use case:** update input data type and add view model namespace ([9f313ec](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/9f313ec123d0525b5d1b4af4d5b6e480d338b7a5))
+
 ## [1.7.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.6.0...v1.7.0) (2025-06-24)
 
 
