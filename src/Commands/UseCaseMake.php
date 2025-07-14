@@ -104,7 +104,8 @@ class UseCaseMake extends GeneratorCommand
                 'DummyInputBoundaryNamespace',
                 'DummyOutputBoundaryNamespace',
                 'DummyInputDataNamespace',
-                'DummyOutputDataNamespace'
+                'DummyOutputDataNamespace',
+                'DummyViewModelNamespace',
             ],
             [
                 $this->getNamespace($name),
@@ -113,6 +114,7 @@ class UseCaseMake extends GeneratorCommand
                 $this->getOutputBoundaryNamespace($name),
                 $this->getInputDataNamespace($name),
                 $this->getOutputDataNamespace($name),
+                $this->getViewModelNamespace($name),
             ],
             $stub
         );
@@ -149,6 +151,14 @@ class UseCaseMake extends GeneratorCommand
     protected function getOutputDataNamespace(string $name): string
     {
         return str_replace('UseCases', 'Data\Output', $this->getNamespace($name));
+    }
+
+    /**
+     * Get the view model namespace for the class.
+     */
+    protected function getViewModelNamespace(string $name): string
+    {
+        return str_replace('UseCases', 'ViewModels', $this->getNamespace($name));
     }
 
     /**

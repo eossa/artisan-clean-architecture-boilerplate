@@ -6,7 +6,7 @@ namespace DummyNamespace;
 
 use DummyInputBoundaryNamespace\DummyClass as InputBoundary;
 use DummyOutputBoundaryNamespace\DummyClass as OutputBoundary;
-use DummyInputDataNamespace\DummyClass as InputData;
+use DummyInputDataNamespace\DummyClass as Data;
 use DummyOutputDataNamespace\DummyClass as OutputData;
 use DummyViewModelNamespace\DummyClass as ViewModel;
 
@@ -19,7 +19,7 @@ class DummyClass implements InputBoundary
         $this->output = $output;
     }
 
-    public function do(InputData $inputData): ViewModel
+    public function do(Data $data): ViewModel
     {
         return $this->output->done(new OutputData());
     }
