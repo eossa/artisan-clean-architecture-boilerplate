@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.1](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.8.0...v1.8.1) (2025-07-14)
+
+
+### Bug Fixes
+
+* **make output boundary:** Bad view model ([077fb0a](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/077fb0ad57495f3a5c84681ec7b4bd4642544a5b))
+* **make output boundary:** Bad view model ([f33a731](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/commit/f33a731ff7f1b2f14928950d1e19887f803e2068))
+
 ## [1.8.0](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.7.0...v1.8.0) (2025-07-14)
 
 
