@@ -3,6 +3,7 @@
 namespace WasiCo\ArtisanCleanArchitectureBoilerplate\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -31,7 +32,7 @@ class BoundaryOutputMake extends GeneratorCommand
 
     public function handle()
     {
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return 1;
         }
 
@@ -77,6 +78,17 @@ class BoundaryOutputMake extends GeneratorCommand
         ]);
     }
 
+    protected function replaceClass($stub, $name)
+    {
+        $stub = parent::replaceClass($stub, $name);
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        foreach (['Get', 'Edit', 'Create', 'Delete'] as $word) {
+            $class = Str::replaceFirst($word, '', $class);
+        }
+        $class = Str::singular($class);
+        return str_replace('DummyViewModelClass', $class, $stub);
+    }
+
     /**
      * Get the stub file for the generator.
      *
@@ -90,18 +102,19 @@ class BoundaryOutputMake extends GeneratorCommand
     /**
      * Replace the namespace for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
      * @return $this
      */
     protected function replaceNamespace(&$stub, $name)
     {
         $stub = str_replace(
-            ['DummyNamespace', 'DummyRootNamespace', 'DummyDataNamespace'],
+            ['DummyNamespace', 'DummyRootNamespace', 'DummyDataNamespace', 'DummyViewModelNamespace'],
             [
                 $this->getNamespace($name),
                 $this->rootNamespace(),
                 $this->getDataNamespace($name),
+                $this->getViewModelNamespace($name),
             ],
             $stub
         );
@@ -121,9 +134,21 @@ class BoundaryOutputMake extends GeneratorCommand
     }
 
     /**
+     * Get the view model namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getViewModelNamespace(string $name): string
+    {
+        return str_replace('Boundaries\Output', 'ViewModels', $this->getNamespace($name));
+    }
+
+    /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
