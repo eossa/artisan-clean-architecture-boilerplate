@@ -29,11 +29,6 @@ class BoundaryOutputMake extends GeneratorCommand
      */
     protected $type = 'Output Boundary';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
         if (parent::handle() === false && ! $this->option('force')) {
@@ -64,24 +59,9 @@ class BoundaryOutputMake extends GeneratorCommand
     {
         $this->call('make:presenter', [
             'name' => $this->argument('name'),
-            'type' => $this->getPresenterType(),
             '--test' => $this->option('test'),
             '--force' => $this->option('force'),
         ]);
-    }
-
-    private function getPresenterType()
-    {
-        if ($this->isHttp()) {
-            return 'http';
-        }
-        if ($this->isCli()) {
-            return 'cli';
-        }
-        if ($this->isJson()) {
-            return 'json';
-        }
-        return null;
     }
 
     /**
@@ -160,8 +140,6 @@ class BoundaryOutputMake extends GeneratorCommand
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the class'],
-
-            ['type', InputArgument::OPTIONAL, 'The type of the presenter', 'http'],
         ];
     }
 
@@ -183,20 +161,5 @@ class BoundaryOutputMake extends GeneratorCommand
 
             ['force', null, InputOption::VALUE_NONE, 'Create the class even if the output boundary already exists.'],
         ];
-    }
-
-    private function isHttp()
-    {
-        return $this->argument('type') === 'http';
-    }
-
-    private function isJson()
-    {
-        return $this->argument('type') === 'json';
-    }
-
-    private function isCli()
-    {
-        return $this->argument('type') === 'cli';
     }
 }

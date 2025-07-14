@@ -129,10 +129,10 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreNotOverwritten()
@@ -144,13 +144,13 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->artisan('make:use-case', ['name' => 'Example', '--presenter' => true])
             ->expectsOutput('Use Case already exists!')
             ->assertExitCode(1);
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureBaseOutputBoundaryAndDefaultPresenterAreOverwrittenWhenAlreadyExists()
@@ -162,7 +162,7 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->artisan('make:use-case', ['name' => 'Example', '--presenter' => true, '--force' => true])
             ->expectsOutput('Use Case created successfully.')
             ->expectsOutput('Output Boundary created successfully.')
@@ -170,10 +170,10 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureBaseOutputBoundaryAndTestAreCreated()
@@ -244,14 +244,14 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
@@ -268,8 +268,8 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
         $this->artisan('make:use-case', ['name' => 'Example', '--all' => true])
@@ -277,8 +277,8 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(1);
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }
@@ -295,8 +295,8 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
         $this->artisan('make:use-case', ['name' => 'Example', '--all' => true, '--force' => true])
@@ -309,14 +309,14 @@ class UseCaseMakeTest extends TestCase
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/UseCases/Example.php'));
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->assertFileExists(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/UseCases/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
         $this->app['files']->delete(base_path('tests/Unit/Domain/UseCases/ExampleTest.php'));
     }

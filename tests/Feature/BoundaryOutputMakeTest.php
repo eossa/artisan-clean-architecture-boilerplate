@@ -101,9 +101,9 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureBaseAndDefaultPresenterAreNotOverwriten()
@@ -113,12 +113,12 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->artisan('make:boundary:output', ['name' => 'Example', '--presenter' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureBaseAndDefaultPresenterAreOverwritenWhenAlreadyExists()
@@ -128,15 +128,15 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->artisan('make:boundary:output', ['name' => 'Example', '--presenter' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
             ->expectsOutput('Presenter created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
     }
 
     public function testEnsureAllAreCreated()
@@ -148,12 +148,12 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
     }
 
@@ -166,15 +166,15 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->artisan('make:boundary:output', ['name' => 'Example', '--all' => true])
             ->expectsOutput('Output Boundary already exists!')
             ->assertExitCode(1);
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
     }
 
@@ -187,8 +187,8 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->artisan('make:boundary:output', ['name' => 'Example', '--all' => true, '--force' => true])
             ->expectsOutput('Output Boundary created successfully.')
@@ -197,12 +197,12 @@ class BoundaryOutputMakeTest extends TestCase
             ->expectsOutput('Output Data created successfully.')
             ->assertExitCode(0);
         $this->assertFileExists(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->assertFileExists(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->assertFileExists(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->assertFileExists(app_path('Domain/Presenters/Example.php'));
+        $this->assertFileExists(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->assertFileExists(app_path('Domain/Data/Output/Example.php'));
         $this->app['files']->delete(app_path('Domain/Boundaries/Output/Example.php'));
-        $this->app['files']->delete(app_path('Infrastructure/Presenters/ExampleHttp.php'));
-        $this->app['files']->delete(base_path('tests/Unit/Infrastructure/Presenters/ExampleHttpTest.php'));
+        $this->app['files']->delete(app_path('Domain/Presenters/Example.php'));
+        $this->app['files']->delete(base_path('tests/Unit/Domain/Presenters/ExampleTest.php'));
         $this->app['files']->delete(app_path('Domain/Data/Output/Example.php'));
     }
 }
