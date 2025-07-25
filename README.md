@@ -7,28 +7,29 @@ A Composer package providing custom Laravel Artisan commands to streamline the c
 To install the package, run the following command:
 
 ```bash
-composer require wasi-co/artisan-clean-architecture-boilerplate
+composer require eossa/artisan-clean-architecture-boilerplate
 ```
 
 ## Usage
 
 This package provides several Artisan commands to help you generate clean architecture components. Below is a list of available commands:
 
-- `php artisan make:boundary-input` - Generates a Boundary Input class.
-- `php artisan make:boundary-output` - Generates a Boundary Output class.
-- `php artisan make:data-input` - Generates a Data Input class.
-- `php artisan make:data-output` - Generates a Data Output class.
+- `php artisan make:boundary:input` - Generates a Boundary Input class.
+- `php artisan make:boundary:output` - Generates a Boundary Output class.
+- `php artisan make:data:input` - Generates a Data Input class.
+- `php artisan make:data:output` - Generates a Data Output class.
 - `php artisan make:entity` - Generates an Entity class.
-- `php artisan make:mapper-eloquent` - Generates an Eloquent Mapper class.
-- `php artisan make:mapper-moloquent` - Generates a Moloquent Mapper class.
-- `php artisan make:mapper-query-builder` - Generates a Query Builder Mapper class.
+- `php artisan make:mapper:eloquent` - Generates an Eloquent Mapper class.
+- `php artisan make:mapper:moloquent` - Generates a Moloquent Mapper class.
+- `php artisan make:mapper:query-builder` - Generates a Query Builder Mapper class.
 - `php artisan make:presenter` - Generates a Presenter class.
-- `php artisan make:repository-eloquent` - Generates an Eloquent Repository class.
 - `php artisan make:repository` - Generates a Repository class.
-- `php artisan make:repository-moloquent` - Generates a Moloquent Repository class.
-- `php artisan make:repository-query-builder` - Generates a Query Builder Repository class.
+- `php artisan make:repository:eloquent` - Generates an Eloquent Repository class.
+- `php artisan make:repository:moloquent` - Generates a Moloquent Repository class.
+- `php artisan make:repository:query-builder` - Generates a Query Builder Repository class.
 - `php artisan make:phpunit` - Generates a Test class.
 - `php artisan make:use-case` - Generates a Use Case class.
+- `php artisan make:view-model` - Generates a View Model class.
 
 ## Running Tests
 
@@ -53,14 +54,8 @@ Run the following command to create a release of the package:
 composer run release
 ```
 
-Do not forget to add the variable `$GITLAB_PERSONAL_ACCESS_TOKEN` to your terminal with your own personal GitLab access token.
-
 ## License
-This package is licensed under a Private License.
+This package is licensed under a MIT License.
 
 ## Authors
-- Wasi - tech.wasi@lifullconnect.com
-- Elkin Ossa - elkin.ossa@lifullconnect.com
-
-## Homepage
-For more information, visit the homepage. 
+- Elkin Ossa - eossa93@hotmail.com
