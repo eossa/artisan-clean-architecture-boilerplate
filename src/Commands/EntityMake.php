@@ -1,6 +1,6 @@
 <?php
 
-namespace WasiCo\ArtisanCleanArchitectureBoilerplate\Commands;
+namespace EOssa\ArtisanCleanArchitectureBoilerplate\Commands;
 
 use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;

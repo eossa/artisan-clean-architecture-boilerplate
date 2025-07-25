@@ -1,9 +1,9 @@
 <?php
 
-namespace WasiCo\ArtisanCleanArchitectureBoilerplate;
+namespace EOssa\ArtisanCleanArchitectureBoilerplate;
 
 use Illuminate\Support\ServiceProvider;
-use WasiCo\ArtisanCleanArchitectureBoilerplate\Commands\{
+use EOssa\ArtisanCleanArchitectureBoilerplate\Commands\{
     BoundaryInputMake,
     BoundaryOutputMake,
     DataInputMake,

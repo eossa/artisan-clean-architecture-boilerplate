@@ -15,7 +15,7 @@ class MapperMoloquentMakeTest extends TestCase
      */
     protected function getPackageProviders($app)
     {
-        return ['WasiCo\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
+        return ['EOssa\\ArtisanCleanArchitectureBoilerplate\\CommandServiceProvider'];
     }
 
     public function testEnsureBaseIsCreated()
