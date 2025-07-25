@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.2](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.1...v1.8.2) (2025-07-25)
+
+
+### Bug Fixes
+
+* Bad namespace ([caec57e](https://github.com/eossa/artisan-clean-architecture-boilerplate/commit/caec57eea1297780b175bf3ddb7b01b4b5d26bee))
+
 ### [1.8.1](https://gitlab.com/lifull-connect/wasi/artisan-clean-architecture-boilerplate/compare/v1.8.0...v1.8.1) (2025-07-14)
 
 
