@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.3](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.2...v1.8.3) (2025-07-31)
+
+
+### Bug Fixes
+
+* **make input boundary:** Bad view model ([f62a612](https://github.com/eossa/artisan-clean-architecture-boilerplate/commit/f62a61276ce9f71c42a85ef0f3c9e9e75100ce2e))
+* **make use case:** Bad view model ([aee474b](https://github.com/eossa/artisan-clean-architecture-boilerplate/commit/aee474bf43cf7dff065c2c4814749e3722c31729))
+
 ### [1.8.2](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.1...v1.8.2) (2025-07-25)
 
 
