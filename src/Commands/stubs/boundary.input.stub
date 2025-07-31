@@ -3,7 +3,7 @@
 namespace DummyNamespace;
 
 use DummyDataNamespace\DummyClass as Data;
-use App\Domain\ViewModel;
+use DummyViewModelNamespace\DummyViewModelClass as ViewModel;
 
 interface DummyClass
 {

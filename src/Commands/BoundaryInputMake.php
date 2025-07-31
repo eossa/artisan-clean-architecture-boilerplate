@@ -3,6 +3,7 @@
 namespace EOssa\ArtisanCleanArchitectureBoilerplate\Commands;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputOption;
 
 class BoundaryInputMake extends GeneratorCommand
@@ -28,14 +29,9 @@ class BoundaryInputMake extends GeneratorCommand
      */
     protected $type = 'Input Boundary';
 
-    /**
-     * Execute the console command.
-     *
-     * @return void
-     */
     public function handle()
     {
-        if (parent::handle() === false && ! $this->option('force')) {
+        if (parent::handle() === false && !$this->option('force')) {
             return 1;
         }
 
@@ -99,18 +95,19 @@ class BoundaryInputMake extends GeneratorCommand
     /**
      * Replace the namespace for the given stub.
      *
-     * @param  string  $stub
-     * @param  string  $name
+     * @param string $stub
+     * @param string $name
      * @return $this
      */
     protected function replaceNamespace(&$stub, $name)
     {
         $stub = str_replace(
-            ['DummyNamespace', 'DummyRootNamespace', 'DummyDataNamespace'],
+            ['DummyNamespace', 'DummyRootNamespace', 'DummyDataNamespace', 'DummyViewModelNamespace'],
             [
                 $this->getNamespace($name),
                 $this->rootNamespace(),
                 $this->getDataNamespace($name),
+                $this->getViewModelNamespace($name),
             ],
             $stub
         );
@@ -130,14 +127,37 @@ class BoundaryInputMake extends GeneratorCommand
     }
 
     /**
+     * Get the view model namespace for the class.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    protected function getViewModelNamespace(string $name): string
+    {
+        return str_replace('Boundaries\Input', 'ViewModels', $this->getNamespace($name));
+    }
+
+    /**
      * Get the default namespace for the class.
      *
-     * @param  string  $rootNamespace
+     * @param string $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace . '\Domain\Boundaries\Input';
+    }
+
+    protected function replaceClass($stub, $name)
+    {
+        $stub = parent::replaceClass($stub, $name);
+        $class = str_replace($this->getNamespace($name) . '\\', '', $name);
+        foreach (['Get', 'Edit', 'Create', 'Delete'] as $word) {
+            $class = Str::replaceFirst($word, '', $class);
+        }
+        $class = Str::singular($class);
+        return str_replace('DummyViewModelClass', $class, $stub);
     }
 
     /**
