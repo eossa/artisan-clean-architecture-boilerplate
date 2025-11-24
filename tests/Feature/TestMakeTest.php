@@ -339,7 +339,6 @@ namespace Tests\Unit\Infrastructure\Controllers$namespace;
 
 use App\Domain\Boundaries\Input$namespace\Example as InputBoundary;
 use App\Domain\Data\Input$namespace\Example as Data;
-use App\Domain\ViewModel;
 use App\Http\Controllers$namespace\Example as Controller;
 use App\Http\Requests$namespace\Example as Request;
 use PHPUnit\Framework\TestCase;
@@ -358,15 +357,9 @@ class ExampleTest extends TestCase
      */
     private \$useCase;
 
-    /**
-     * @var ObjectProphecy|ViewModel
-     */
-    private \$viewModel;
-
     public function testEnsureUseCaseIsCalled()
     {
-        \$this->useCase->do(new Data())->willReturn(\$this->viewModel->reveal());
-        \$this->viewModel->render()->willReturn('OK');
+        \$this->useCase->do(new Data())->willReturn(null);
         \$request = RequestBuilder::aRequest()
             ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
             ->withBodyJsonAsArray([
@@ -379,13 +372,11 @@ class ExampleTest extends TestCase
         \$this->assertNotNull(\$response);
         \$this->assertEquals('OK', \$response);
         \$this->useCase->do(new Data())->shouldHaveBeenCalled();
-        \$this->viewModel->render()->shouldHaveBeenCalled();
     }
 
     protected function setUp()
     {
         \$this->useCase = \$this->prophesize(InputBoundary::class);
-        \$this->viewModel = \$this->prophesize(ViewModel::class);
         \$this->controller = new Controller(\$this->useCase->reveal());
     }
 }

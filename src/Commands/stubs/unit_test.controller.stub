@@ -6,7 +6,6 @@ namespace DummyNamespace;
 
 use DummyInputBoundaryNamespace\DummyClass as InputBoundary;
 use DummyInputDataNamespace\DummyClass as Data;
-use App\Domain\ViewModel;
 use DummyControllerNamespace\DummyClass as Controller;
 use DummyRequestNamespace\DummyClass as Request;
 use PHPUnit\Framework\TestCase;
@@ -25,15 +24,9 @@ class DummyClassTest extends TestCase
      */
     private $useCase;
 
-    /**
-     * @var ObjectProphecy|ViewModel
-     */
-    private $viewModel;
-
     public function testEnsureUseCaseIsCalled()
     {
-        $this->useCase->do(new Data())->willReturn($this->viewModel->reveal());
-        $this->viewModel->render()->willReturn('OK');
+        $this->useCase->do(new Data())->willReturn(null);
         $request = RequestBuilder::aRequest()
             ->withHeader('HTTP_CONTENT_TYPE', 'application/json')
             ->withBodyJsonAsArray([
@@ -46,13 +39,11 @@ class DummyClassTest extends TestCase
         $this->assertNotNull($response);
         $this->assertEquals('OK', $response);
         $this->useCase->do(new Data())->shouldHaveBeenCalled();
-        $this->viewModel->render()->shouldHaveBeenCalled();
     }
 
     protected function setUp()
     {
         $this->useCase = $this->prophesize(InputBoundary::class);
-        $this->viewModel = $this->prophesize(ViewModel::class);
         $this->controller = new Controller($this->useCase->reveal());
     }
 }
