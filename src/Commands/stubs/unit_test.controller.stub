@@ -7,7 +7,7 @@ namespace DummyNamespace;
 use DummyInputBoundaryNamespace\DummyClass as InputBoundary;
 use DummyInputDataNamespace\DummyClass as Data;
 use App\Domain\ViewModel;
-use DummyControllerNamespace\DummyClassController as Controller;
+use DummyControllerNamespace\DummyClass as Controller;
 use DummyRequestNamespace\DummyClass as Request;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;

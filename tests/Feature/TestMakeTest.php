@@ -340,7 +340,7 @@ namespace Tests\Unit\Infrastructure\Controllers$namespace;
 use App\Domain\Boundaries\Input$namespace\Example as InputBoundary;
 use App\Domain\Data\Input$namespace\Example as Data;
 use App\Domain\ViewModel;
-use App\Http\Controllers$namespace\ExampleController as Controller;
+use App\Http\Controllers$namespace\Example as Controller;
 use App\Http\Requests$namespace\Example as Request;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
