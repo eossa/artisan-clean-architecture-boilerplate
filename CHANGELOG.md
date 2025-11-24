@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.5](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.4...v1.8.5) (2025-11-24)
+
+
+### Bug Fixes
+
+* **make test:** Remove generic view model from controller test ([c153609](https://github.com/eossa/artisan-clean-architecture-boilerplate/commit/c15360909f86c5e5f44229dce15c03904db58058))
+
 ### [1.8.4](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.3...v1.8.4) (2025-11-24)
 
 
