@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.8.4](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.3...v1.8.4) (2025-11-24)
+
+
+### Bug Fixes
+
+* **make test:** Remove 'Controller' suffix ([e5023ea](https://github.com/eossa/artisan-clean-architecture-boilerplate/commit/e5023eaac37710d071d133e316fc657dcb29ee5c))
+
 ### [1.8.3](https://github.com/eossa/artisan-clean-architecture-boilerplate/compare/v1.8.2...v1.8.3) (2025-07-31)
 
 
